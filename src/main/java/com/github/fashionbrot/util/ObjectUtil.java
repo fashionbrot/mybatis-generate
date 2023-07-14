@@ -1,9 +1,7 @@
 package com.github.fashionbrot.util;
 
 
-import com.github.fashionbrot.enums.ClassTypeEnum;
 import lombok.extern.slf4j.Slf4j;
-
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -141,36 +139,7 @@ public class ObjectUtil {
 
 
 
-    public static Object formatObject(Object defaultValue,Class type){
-        ClassTypeEnum classTypeEnum = ClassTypeEnum.getValue(type.getTypeName());
-        try {
-            if (classTypeEnum != null) {
-                switch (classTypeEnum) {
-                    case PACK_BOOLEAN:
-                        return ObjectUtil.formatBoolean(defaultValue);
-                    case PACK_INT:
-                        return ObjectUtil.formatInteger(defaultValue);
-                    case PACK_LONG:
-                        return  ObjectUtil.getLongValue(defaultValue);
-                    case PACK_DOUBLE:
-                        return ObjectUtil.getDoubleValue(defaultValue);
-                    case PACK_FLOAT:
-                        return ObjectUtil.getFloatValue(defaultValue);
-                    case PACK_SHORT:
-                        return ObjectUtil.getShortValue(defaultValue);
-                    case BIG_DECIMAL:
-                        return ObjectUtil.getBigDecimalValue(defaultValue);
-                    default:
-                        return defaultValue;
-                }
-            }else{
-                return defaultValue;
-            }
-        } catch (Exception e){
-            log.error("formatObject classType:{} value:{} error:",type,defaultValue,e);
-        }
-        return null;
-    }
+
 
     public static boolean isDigits(String str) {
         return isNumeric(str);
@@ -807,5 +776,71 @@ public class ObjectUtil {
         }
     }
 
+    /**
+     * <p>Uncapitalizes a String, changing the first character to lower case as
+     * per {@link Character#toLowerCase(int)}. No other characters are changed.</p>
+     *
+     * <p>For a word based algorithm, see {@link org.apache.commons.lang3.text.WordUtils#uncapitalize(String)}.
+     * A {@code null} input String returns {@code null}.</p>
+     *
+     * <pre>
+     * StringUtils.uncapitalize(null)  = null
+     * StringUtils.uncapitalize("")    = ""
+     * StringUtils.uncapitalize("cat") = "cat"
+     * StringUtils.uncapitalize("Cat") = "cat"
+     * StringUtils.uncapitalize("CAT") = "cAT"
+     * </pre>
+     *
+     * @param str the String to uncapitalize, may be null
+     * @return the uncapitalized String, {@code null} if null String input
+     * @since 2.0
+     */
+    public static String uncapitalize(final String str) {
+        final int strLen = length(str);
+        if (strLen == 0) {
+            return str;
+        }
+
+        final int firstCodepoint = str.codePointAt(0);
+        final int newCodePoint = Character.toLowerCase(firstCodepoint);
+        if (firstCodepoint == newCodePoint) {
+            // already capitalized
+            return str;
+        }
+
+        final int newCodePoints[] = new int[strLen]; // cannot be longer than the char array
+        int outOffset = 0;
+        newCodePoints[outOffset++] = newCodePoint; // copy the first codepoint
+        for (int inOffset = Character.charCount(firstCodepoint); inOffset < strLen; ) {
+            final int codepoint = str.codePointAt(inOffset);
+            newCodePoints[outOffset++] = codepoint; // copy the remaining ones
+            inOffset += Character.charCount(codepoint);
+        }
+        return new String(newCodePoints, 0, outOffset);
+    }
+
+
+    /**
+     * Gets a CharSequence length or {@code 0} if the CharSequence is
+     * {@code null}.
+     *
+     * @param cs
+     *            a CharSequence or {@code null}
+     * @return CharSequence length or {@code 0} if the CharSequence is
+     *         {@code null}.
+     * @since 2.4
+     * @since 3.0 Changed signature from length(String) to length(CharSequence)
+     */
+    public static int length(final CharSequence cs) {
+        return cs == null ? 0 : cs.length();
+    }
+
+
+    public static boolean isBoolean(Boolean bool){
+        if (bool==null){
+            return false;
+        }
+        return bool;
+    }
 
 }

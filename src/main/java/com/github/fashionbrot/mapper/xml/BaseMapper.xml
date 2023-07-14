@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.fashionbrot.mapper.BaseMapper">
+
+
+    <select id="tableList" resultType="tableEntity">
+        ${sql}
+    </select>
+
+    <select id="queryTable" resultType="tableEntity">
+        ${sql}
+    </select>
+
+    <select id="queryColumns" resultType="columnEntity">
+        ${sql}
+    </select>
+
+
+</mapper>

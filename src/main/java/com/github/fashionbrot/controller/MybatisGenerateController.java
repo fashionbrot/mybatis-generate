@@ -7,9 +7,9 @@ import com.github.fashionbrot.request.GenerateRequest;
 import com.github.fashionbrot.response.Response;
 import com.github.fashionbrot.service.DruidService;
 import com.github.fashionbrot.service.MybatisGenerateService;
+import com.github.fashionbrot.util.IoUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +68,7 @@ public class MybatisGenerateController {
             response.setHeader("Content-Disposition", ("attachment; filename=\"quick.zip\""));
             response.addHeader("Content-Length", "" + data.length);
             response.setContentType("application/octet-stream; charset=UTF-8");
-            IOUtils.write(data, response.getOutputStream());
+            IoUtil.write(data, response.getOutputStream());
         }catch (Exception e){
             log.error("generateZip error",e);
         }
@@ -80,7 +80,14 @@ public class MybatisGenerateController {
     @ResponseBody
     @RequestMapping("/generate")
     public Response generate(GenerateRequest request)  {
-//        quickService.generatorCode( req);
+
+        request = GenerateRequest.builder()
+                .selectTableNames("banner")
+                .author("张三")
+                .entityEnable(true)
+                .build();
+
+        mybatisGenerateService.generatorCode(request);
         return Response.success();
     }
 

@@ -65,4 +65,9 @@ public class DataTypeService {
         return null;
     }
 
+
+    public String getProperty(String dataType, String unknowType) {
+        Properties properties = getDataType();
+        return properties.getProperty(dataType,unknowType);
+    }
 }

@@ -1,64 +1,86 @@
 package com.github.fashionbrot.request;
 
 import com.github.fashionbrot.enums.DatabaseEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class GenerateRequest {
 
 
     private String databaseName;
     private String tableName;
 
-    /**
-     * zip  local
-     */
-    private String outType;
-
-    private String packageOut;
-
-    private String out;
-
-    private String controllerOut;
-    private String controllerSuffix;
-
-    private String serviceOut;
-    private String serviceSuffix;
-
-    private String serviceImplOut;
-    private String serviceImplSuffix;
-
-    private String mapperOut;
-    private String mapperSuffix;
-
-    private String mapperXmlOut;
-    private String mapperXmlSuffix;
-
-    private String entityOut;
-    private String entitySuffix;
-
-
-    private String requestOut;
-    private String requestSuffix;
-
-    private String responseOut;
-    private String responseSuffix;
-
-
-    private String responseClassName;
-
-    private String permissionOut;
-    private String permissionClassName;
-    private Boolean permissionEnable;
-
     private String selectTableNames;
     private String excludePrefix;
     private String author;
 
+    /**
+     * 输出类型 zip  local
+     */
+    private String outType;
 
+    /**
+     * 输出总路径
+     */
+    private String out;
+    /**
+     * 包路径
+     */
+    private String packageOut;
 
+    /**
+     * java source set 如：src/main/java
+     */
+    private String sourceSetJava;
+    /**
+     * resources source set 如：src/main/resources
+     */
+    private String sourceSetResources;
 
+    private Boolean controllerEnable;
+    private String controllerOut;
+    private String controllerSuffix;
+
+    private Boolean serviceEnable;
+    private String serviceOut;
+    private String serviceSuffix;
+
+    private Boolean serviceImplEnable;
+    private String serviceImplOut;
+    private String serviceImplSuffix;
+
+    private Boolean mapperEnable;
+    private String mapperOut;
+    private String mapperSuffix;
+
+    private Boolean mapperXmlEnable;
+    private String mapperXmlOut;
+    private String mapperXmlSuffix;
+
+    private Boolean entityEnable;
+    private String entityOut;
+    private String entitySuffix;
+
+    private Boolean requestEnable;
+    private String requestOut;
+    private String requestSuffix;
+
+    private Boolean responseEnable;
+    private String responseOut;
+    private String responseSuffix;
+
+    private String responseClassName;
+
+    private Boolean permissionEnable;
+    private String permissionOut;
+    private String permissionClassName;
 
 
     /**
@@ -68,8 +90,10 @@ public class GenerateRequest {
 
     private String compileType;
 
-
-
+    /**
+     * 实体类 是否序列化
+     */
+    private Boolean serialVersionUIDEnable;
     /**
      * 是否开启 swagger2
      */

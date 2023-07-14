@@ -19,7 +19,7 @@ public class DatabaseService {
     public DatabaseEnum getDatabaseEnum(){
         String url = druidDataSource.getUrl();
 
-        DatabaseEnum databaseEnum = DatabaseEnum.getMapperPrefix(url);
+        DatabaseEnum databaseEnum = DatabaseEnum.getDatabase(url);
         if (databaseEnum==null){
             MybatisGenerateException.throwMsg("不支持当前数据库：" + druidDataSource.getDriverClassName());
         }

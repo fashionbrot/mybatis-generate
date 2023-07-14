@@ -15,20 +15,9 @@ spring:
     servlet:
       content-type: text/html
     suffix: .html
-  servlet:
-    multipart:
-      enabled: true
-      max-request-size: 50MB
-      max-file-size: 50MB
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
-pagehelper:
-  helper-dialect: mysql
-  params: count=countSql
-  reasonable: true
-  support-methods-arguments: false
 
 mybatis-plus:
   mapper-locations: classpath*:com/github/fashionbrot/mapper/xml/*.xml

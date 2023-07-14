@@ -1,30 +1,30 @@
 package com.github.fashionbrot.service;
 
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.github.fashionbrot.config.DatasourceConfig;
+import com.github.fashionbrot.config.GenerateOut;
+import com.github.fashionbrot.config.GenerateTemplate;
+import com.github.fashionbrot.config.VmConfig;
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
 import com.github.fashionbrot.enums.DatabaseEnum;
 import com.github.fashionbrot.exception.MybatisGenerateException;
-import com.github.fashionbrot.mapper.BaseMapper;
 import com.github.fashionbrot.request.GenerateRequest;
+import com.github.fashionbrot.util.FileUtil;
+import com.github.fashionbrot.util.GenericTokenUtil;
 import com.github.fashionbrot.util.MethodUtil;
 import com.github.fashionbrot.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,14 +35,13 @@ import java.util.regex.Pattern;
 public class MybatisGenerateService {
 
     final DruidService druidService;
-    final BaseMapper baseMapper;
+    final DatasourceTypeServer baseMapper;
     final DatabaseService databaseService;
     final DataTypeService dataTypeService;
 
+    final VmConfig vmConfig;
 
     public void generatorCode(GenerateRequest request) {
-
-
 
         String[] tableNames=request.getSelectTableNames().split(",");
         if (ObjectUtil.isEmpty(tableNames)){
@@ -57,47 +56,85 @@ public class MybatisGenerateService {
         VelocityContext velocityContext = initTemplate(request);
 
         for(String tableName : tableNames){
-            velocityContext.internalPut("tableName",tableName);
 
-            Map<String, StringWriter> fileMap = generator(req,tableName);
-            if (CollectionUtils.isNotEmpty(fileMap)){
-                for(Map.Entry<String,StringWriter> map: fileMap.entrySet()){
+            List<GenerateOut> generateOutList = getGenerateOutList(velocityContext, tableName);
+            if (ObjectUtil.isNotEmpty(generateOutList)){
+                generateOutList.forEach(m->{
+                    FileUtil.createFile(m.getFileFullPath(),m.getTemplateValue().toString());
+                });
+            }
 
-                    createFile(map.getKey(),map.getValue().toString());
+        }
+    }
+
+
+    private List<GenerateOut> getGenerateOutList(VelocityContext velocityContext,String tableName){
+
+        List<GenerateOut> generateOutList= new ArrayList<>();
+        VelocityContext context = initTableColumn(velocityContext, tableName);
+        Map<String, Object> contextMap = transform(context);
+        List<GenerateTemplate> vms = vmConfig.getVms();
+        if (ObjectUtil.isNotEmpty(vms)){
+            for (int i = 0; i < vms.size(); i++) {
+                GenerateTemplate template = vms.get(i);
+
+                String enableVariable = GenericTokenUtil.parse(template.getEnable(), contextMap);
+                if (!ObjectUtil.parseBoolean(enableVariable)){
+                    continue;
                 }
+
+                template.setTemplatePath( GenericTokenUtil.parse(template.getTemplatePath(), contextMap));
+                template.setOutFilePath( GenericTokenUtil.parse(template.getOutFilePath(), contextMap));
+                template.setOutFileName(GenericTokenUtil.parse(template.getOutFileName(), contextMap));
+                template.setOutFileSuffix(GenericTokenUtil.parse(template.getOutFileSuffix(), contextMap));
+
+                StringWriter templateValue = getTemplateValue(template.getTemplatePath(), context);
+                String fileFullPath = getFileFullPath(template);
+
+                generateOutList.add(GenerateOut.builder()
+                                .templateValue(templateValue)
+                                .fileFullPath(fileFullPath)
+                        .build());
             }
         }
 
-        if ("on".equals(request.getFixed())){
-            Map<String, StringWriter> fixedMap = generateFixed(req);
-            if (CollectionUtils.isNotEmpty(fixedMap)){
-                for(Map.Entry<String,StringWriter> map: fixedMap.entrySet()){
-                    createFile(map.getKey(),map.getValue().toString());
-                }
-            }
-        }
+        return generateOutList;
+    }
 
+    public String getFileFullPath(GenerateTemplate template){
+        return template.getOutFilePath()+ File.separator+ template.getOutFileName()+template.getOutFileSuffix();
 
     }
 
 
-    private void getTemplateTxt(VelocityContext velocityContext,String tableName){
-
-        TableEntity tableEntity = baseMapper.queryTable(tableName);
-        if (tableEntity==null){
-            MybatisGenerateException.throwMsg(tableName+"表不存在，请刷新重试");
-        }
-
-
+    private StringWriter getTemplateValue(String templatePath, VelocityContext velocityContext) {
+        StringWriter sw = new StringWriter();
+        Template tpl = Velocity.getTemplate(templatePath, "UTF-8");
+        tpl.merge(velocityContext, sw);
+        return sw;
     }
 
-    public void initTableColumn(VelocityContext context,String tableName){
 
+    public Map<String,Object> transform(VelocityContext context){
+        String[] keys = context.getKeys();
+        Map<String,Object> map=new HashMap<>();
+        if (ObjectUtil.isNotEmpty(keys)){
+            for(String key: keys){
+                Object value = context.get(key);
+                map.put(key,value);
+            }
+            return map;
+        }
+        return map;
+    }
+
+    public VelocityContext initTableColumn(VelocityContext context,String tableName){
+        context.put("tableName",tableName);
         TableEntity tableEntity = baseMapper.queryTable(tableName);
         if (tableEntity==null){
             MybatisGenerateException.throwMsg(tableName+"表不存在，请刷新重试");
         }
-        String excludePrefix = (String)context.get("excludePrefix");
+        String excludePrefix = ObjectUtil.formatString(context.get("excludePrefix"));
 
         String className = tableToJava(tableName, excludePrefix);
         tableEntity.setClassName(className);
@@ -105,42 +142,55 @@ public class MybatisGenerateService {
 
 
         List<ColumnEntity> columns = baseMapper.queryColumns(tableName);
-        setDataType(tableEntity, columns,req);
+        setDataType(context,tableEntity, columns);
         tableEntity.setColumns(columns);
+        //description
+
+        Boolean serialVersionUIDEnable = (Boolean) context.get("serialVersionUIDEnable");
+        if (ObjectUtil.isBoolean(serialVersionUIDEnable)){
+            context.put("serialVersionUID",IdWorker.getId());
+        }
+        setMapperColumn(context, tableEntity);
+        context.put("tableField",tableEntity);
+
+        return context;
+    }
+
+    private void setMapperColumn(VelocityContext context, TableEntity tableEntity) {
+        StringBuilder allColumn = new StringBuilder();
+        StringBuilder allColumnAlias = new StringBuilder();
+        for (ColumnEntity c : tableEntity.getColumns()) {
+            if (ObjectUtil.isNotEmpty(allColumn.toString())) {
+                allColumn.append(",").append(c.getColumnName());
+                allColumnAlias.append(",en.").append(c.getColumnName());
+            } else {
+                allColumn.append(c.getColumnName());
+                allColumnAlias.append("en." + c.getColumnName());
+            }
+        }
+        context.put("allColumn",allColumn.toString());
+        context.put("allColumnAlias",allColumnAlias.toString());
     }
 
 
-    private void setDataType(TableEntity tableEntity, List<ColumnEntity> columns,CodeReq req) {
-
-
-        String keyword = environment.getProperty("mars.quick.keyword");
-        String[] keywords = keyword.split(",");
+    private void setDataType(VelocityContext context,TableEntity tableEntity, List<ColumnEntity> columns) {
 
         for(ColumnEntity columnEntity: columns){
             //列名转换成Java属性名
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setAttrName(attrName);
-            columnEntity.setVariableAttrName(StringUtils.uncapitalize(attrName));
+            columnEntity.setVariableAttrName(ObjectUtil.uncapitalize(attrName));
 
             columnEntity.setColumnNameXmlUse(columnEntity.getColumnName());
-            if (Arrays.stream(keywords).filter(m-> m.equals(columnEntity.getColumnName())).count()>0){
-                columnEntity.setColumnName("`"+columnEntity.getColumnName()+"`");
-            }
 
-            //列的数据类型，转换成Java类型
-            if("NUMBER".equals(columnEntity.getDataType()) && columnEntity.getDataScale() > 0){
-                columnEntity.setAttrType("Double");
-            }else if("NUMBER".equals(columnEntity.getDataType()) && columnEntity.getDataPrecision()>14){
-                columnEntity.setAttrType("Long");
-            }else{
-                String attrType = environment.getProperty(columnEntity.getDataType(), "unknowType");
-                columnEntity.setAttrType(attrType);
-                if (attrType.equalsIgnoreCase("BigDecimal" )) {
-                    req.setHasBigDecimal(true);
-                }
+            columnEntity.setColumnName(baseMapper.formatColumn(columnEntity.getColumnName()));
+
+            String attrType = dataTypeService.getProperty(columnEntity.getDataType(), "unknowType");
+            columnEntity.setAttrType(attrType);
+            if (attrType.equalsIgnoreCase("BigDecimal" )) {
+                context.internalPut("hasBigDecimal",true);
             }
-            //是否主键
-            if("PRI".equalsIgnoreCase(columnEntity.getColumnKey()) && tableEntity.getPrimaryKeyColumnEntity() == null){
+            if ( baseMapper.isKeyIdentity(columnEntity)){
                 tableEntity.setPrimaryKeyColumnEntity(columnEntity);
             }
         }
@@ -150,16 +200,16 @@ public class MybatisGenerateService {
      * 表名转换成Java类名
      */
     public static String tableToJava(String tableName, String tablePrefix) {
-        if(StringUtils.isNotBlank(tablePrefix)){
+        if(ObjectUtil.isNotEmpty(tablePrefix)){
             tableName = tableName.replaceFirst(tablePrefix, "");
         }
-        return lineToHump(tableName);
+        return columnToJava(tableName);
     }
 
 
     private static Pattern linePattern = Pattern.compile("_(\\w)");
     /** 下划线转驼峰 */
-    public static String lineToHump(String str) {
+    public static String columnToJava(String str) {
         str = str.toLowerCase();
         Matcher matcher = linePattern.matcher(str);
         StringBuffer sb = new StringBuffer();
@@ -196,74 +246,6 @@ public class MybatisGenerateService {
 
 
 
-
-    private VelocityContext addTableTemplate(VelocityContext context,TableEntity tableEntity){
-        Map<String, Object> map = new HashMap<>();
-        map.put("oldTableName", tableEntity.getTableName());
-        // 处理注释
-        if(StringUtils.isNotBlank(tableEntity.getComments())){
-            map.put("comments", tableEntity.getComments());
-            map.put("commentsEntity", tableEntity.getComments());
-            map.put("commentsService", tableEntity.getComments());
-            map.put("commentsController", tableEntity.getComments());
-            map.put("commentsApi", tableEntity.getComments());
-            map.put("commentsDao", tableEntity.getComments());
-        }
-        map.put("pk", tableEntity.getPrimaryKeyColumnEntity());
-        map.put("pkAttrType",tableEntity.getPrimaryKeyColumnEntity()!=null?tableEntity.getPrimaryKeyColumnEntity().getAttrType():"String");
-        map.put("autoIncrement",tableEntity.getPrimaryKeyColumnEntity()!=null?"auto_increment".equalsIgnoreCase(tableEntity.getPrimaryKeyColumnEntity().getExtra()):false);
-        map.put("className", tableEntity.getClassName().replace(captureName(req.getExcludePrefix()),""));
-        map.put("variableClassName", tableEntity.getVariableClassName());
-        map.put("columns", tableEntity.getColumns());
-
-        map.put("serialVersionUID", IdWorker.getId());
-
-        StringBuilder sb = new StringBuilder();
-        StringBuilder sb2 = new StringBuilder();
-        for (ColumnEntity c : tableEntity.getColumns()) {
-            if (StringUtils.isNotBlank(sb.toString())) {
-                sb.append(",").append(c.getColumnName());
-                sb2.append(",a.").append(c.getColumnName());
-            } else {
-                sb.append(c.getColumnName());
-                sb2.append("a." + c.getColumnName());
-            }
-        }
-        map.put("allColumnNames",sb.toString());
-        map.put("allColumnNames2",sb2.toString());
-
-        map.put("hasBigDecimal", req.getHasBigDecimal());
-
-        // API接口排序
-        if(tableEntity.getCreateTime()!= null){
-            map.put("apiSort", StringUtils.substring(String.valueOf(tableEntity.getCreateTime().getTime() + System.currentTimeMillis()), 1, 9));
-        }
-
-
-        if(StringUtils.isNotBlank(tableEntity.getTableName())){
-            String tableName = StringUtils.lowerCase(tableEntity.getTableName());
-            map.put("pathName", tableName.replace("_","/"));
-            map.put("permissionPrefix", tableEntity.getVariableClassName());
-            map.put("classServiceImpl",tableEntity.getVariableClassName());
-            map.put("requestMappingPath",tableEntity.getVariableClassName());
-            // 前端权限标识
-            map.put("apiPermission", tableName.replace("_",":"));
-//            map.put("vueFileName", className.toLowerCase());
-        }
-        if (context!=null){
-            String[] keys = context.getKeys();
-            if (keys!=null && keys.length>0){
-                for(String key: keys){
-                    Object value = context.get(key);
-                    map.put(key,value);
-                }
-            }
-        }
-
-        VelocityContext newContent = new VelocityContext(map);
-
-        return newContent;
-    }
 
 
 }

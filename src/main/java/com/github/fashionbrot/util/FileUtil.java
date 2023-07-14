@@ -3,10 +3,7 @@ package com.github.fashionbrot.util;
 import com.github.fashionbrot.consts.GlobalConst;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
@@ -169,5 +166,26 @@ public class FileUtil {
         }
     }
 
+
+    public static void createFile(String fileName,String fileContent) {
+        try {
+            File file=new File(fileName);
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            if(!file.exists()) {
+                file.createNewFile();
+            }else{
+                file.delete();
+            }
+            FileOutputStream out=new FileOutputStream(file,true);
+            out.write(fileContent.getBytes("utf-8"));
+            out.close();
+            log.info("fileName:"+fileName+" 开始生成");
+        }catch (Exception e){
+            log.error("createFile error",e);
+        }
+
+    }
 
 }

@@ -18,20 +18,18 @@ apply plugin: 'idea'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
 processResources {
     from('src/main/java') {
         include '**/**Mapper.xml'
     }
 }
 
-configurations {
-    all*.exclude group:"ch.qos.logback", module:""
-    all*.exclude group:"org.apache.logging", module:""
-    all*.exclude group:"org.springframework.boot", module:"spring-boot-starter-logging"
-    all*.exclude group:"com.zaxxer", module:""
-}
-
+//configurations {
+//    all*.exclude group:"ch.qos.logback", module:""
+//    all*.exclude group:"org.apache.logging", module:""
+//    all*.exclude group:"org.springframework.boot", module:"spring-boot-starter-logging"
+//    all*.exclude group:"com.zaxxer", module:""
+//}
 
 repositories {
     mavenLocal()
@@ -60,15 +58,15 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation "org.springframework.boot:spring-boot-starter-logger"
 
 
     implementation "org.apache.velocity:velocity-engine-core:${velocity}"
     implementation 'org.apache.velocity.tools:velocity-tools-generic:3.0'
 
-    implementation 'org.apache.commons:commons-lang3:3.10'
-    implementation 'commons-io:commons-io:2.5'
+//    implementation 'org.apache.commons:commons-lang3:3.10'
+//    implementation 'commons-io:commons-io:2.5'
 
 
 
@@ -82,6 +80,12 @@ dependencies {
     implementation 'com.microsoft.sqlserver:sqljdbc4:4.0'
 
     implementation 'com.baomidou:mybatis-plus-generator:3.5.1'
+
+//    implementation "org.tinylog:tinylog-api:${tinylog_version}"
+//    implementation "org.tinylog:tinylog-impl:${tinylog_version}"
+//    implementation "org.tinylog:slf4j-tinylog:${tinylog_version}"
+//    implementation "org.tinylog:jcl-tinylog:${tinylog_version}"
+//    implementation "org.tinylog:log4j1.2-api:${tinylog_version}"
 
 
 }

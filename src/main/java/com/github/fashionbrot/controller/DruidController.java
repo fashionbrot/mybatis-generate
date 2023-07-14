@@ -24,8 +24,15 @@ public class DruidController {
 
     @ResponseBody
     @RequestMapping("/reload")
-    public Response reload(DatabaseRequest req) {
-        druidService.reload(req);
+    public Response reload(DatabaseRequest request) {
+        request = DatabaseRequest.builder()
+                .url("jdbc:mysql://127.0.0.1:3306/test?Unicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false")
+                .name("uuid")
+                .username("root")
+                .password("123456")
+                .driverClassName("com.mysql.jdbc.Driver")
+                .build();
+        druidService.reload(request);
         return Response.success();
     }
 

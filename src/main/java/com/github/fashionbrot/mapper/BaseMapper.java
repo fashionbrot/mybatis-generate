@@ -3,39 +3,32 @@ package com.github.fashionbrot.mapper;
 
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
+import org.apache.ibatis.annotations.Mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
+@Mapper
 public interface BaseMapper {
 
     /**
      * 获取数据库表
-     * @param tableName 查询条件
+     * @param sql 查询条件
      * @return
      */
-    List<TableEntity> tableList(String tableName);
+     List<TableEntity> tableList(String sql);
+
     /**
-     * 获取表对象
-     * @param tableName 查询条件
+     * 获取当前表
+     * @param sql
      * @return
      */
-    TableEntity queryTable(String tableName);
+     TableEntity queryTable(String sql);
     /**
      * 获取表的列集合
-     * @param tableName 查询条件
+     * @param sql 查询条件
      * @return
      */
-    List<ColumnEntity> queryColumns(String tableName);
+    List<ColumnEntity> queryColumns(String sql);
 
-    /**
-     * 是否是主键
-     * @return
-     */
-    boolean isKeyIdentity(ColumnEntity columnEntity);
-
-    List<String> getKeyWords();
 
 }
