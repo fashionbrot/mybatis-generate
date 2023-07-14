@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.fashionbrot.mapper.OracleMapper">
+
+	<resultMap id="tableEntity" type="com.github.fashionbrot.entity.TableEntity">
+		<result property="tableName" column="TABLE_NAME" ></result>
+		<result property="comments" column="COMMENTS" ></result>
+		<result property="createTime" column="CREATED" ></result>
+		<result property="updateTime" column="LAST_DDL_TIME" ></result>
+	</resultMap>
+
+	<resultMap id="columnEntity" type="com.github.fashionbrot.entity.ColumnEntity">
+		<result property="tableName" column="TABLE_NAME" ></result>
+		<result property="columnId" column="COLUMN_ID" ></result>
+		<result property="columnName" column="COLUMN_NAME" ></result>
+		<result property="dataType" column="DATA_TYPE" ></result>
+		<result property="dataLength" column="DATA_LENGTH" ></result>
+		<result property="dataPrecision" column="DATA_PRECISION" ></result>
+		<result property="dataScale" column="DATA_SCALE" ></result>
+		<result property="nullable" column="NULLABLE" ></result>
+		<result property="comments" column="COMMENTS" ></result>
+		<result property="columnKey" column="COLUMN_KEY" ></result>
+		<result property="extra" column="EXTRA" ></result>
+	</resultMap>
+
+	<select id="tableList" resultMap="tableEntity">
+		SELECT DT.TABLE_NAME, DTC.COMMENTS, UO.CREATED, UO.LAST_DDL_TIME
+		FROM USER_TABLES DT
+		INNER JOIN USER_TAB_COMMENTS DTC ON DT.TABLE_NAME = DTC.TABLE_NAME
+		INNER JOIN USER_OBJECTS UO ON DT.TABLE_NAME = UO.OBJECT_NAME
+		WHERE UO.OBJECT_TYPE = 'TABLE'
+		<if test="tableName != null and tableName.trim() != ''">
+			AND DT.TABLE_NAME LIKE ('%' || UPPER(#{tableName}) || '%')
+		</if>
+		ORDER BY DT.TABLE_NAME
+	</select>
+
+	<select id="queryTable" resultMap="tableEntity">
+		SELECT DT.TABLE_NAME, DTC.COMMENTS, UO.CREATED
+		FROM USER_TABLES DT
+		INNER JOIN USER_TAB_COMMENTS DTC ON DT.TABLE_NAME = DTC.TABLE_NAME
+		INNER JOIN USER_OBJECTS UO ON DT.TABLE_NAME = UO.OBJECT_NAME
+		WHERE UO.OBJECT_TYPE = 'TABLE'
+			AND DT.TABLE_NAME = UPPER(#{tableName})
+	</select>
+
+	<select id="queryColumns" resultMap="columnEntity">
+        SELECT
+            TEMP.TABLE_NAME,
+			TEMP.COLUMN_ID,
+			TEMP.COLUMN_NAME,
+			TEMP.DATA_TYPE,
+			TEMP.DATA_LENGTH,
+			TEMP.DATA_PRECISION,
+			TEMP.DATA_SCALE,
+			TEMP.NULLABLE,
+			TEMP.COMMENTS,
+			CASE TEMP.CONSTRAINT_TYPE
+				WHEN 'P' THEN 'PRI'
+				WHEN 'C' THEN 'UNI'
+				ELSE ''
+			END "COLUMN_KEY", '' "EXTRA"
+		FROM (
+			SELECT
+			    COL.TABLE_NAME,
+				COL.COLUMN_ID,
+				COL.COLUMN_NAME,
+				COL.DATA_TYPE,
+				COL.DATA_LENGTH,
+				COL.DATA_PRECISION,
+				COL.DATA_SCALE,
+				COL.NULLABLE,
+				COLC.COMMENTS,
+				UC.CONSTRAINT_TYPE,
+				ROW_NUMBER() OVER (PARTITION BY COL.COLUMN_NAME ORDER BY UC.CONSTRAINT_TYPE DESC) AS ROW_FLG
+			FROM USER_TAB_COLUMNS COL
+			LEFT JOIN USER_COL_COMMENTS COLC ON COLC.TABLE_NAME = COL.TABLE_NAME
+				AND COLC.COLUMN_NAME = COL.COLUMN_NAME
+			LEFT JOIN USER_CONS_COLUMNS UCC ON UCC.TABLE_NAME = COL.TABLE_NAME
+				AND UCC.COLUMN_NAME = COL.COLUMN_NAME
+			LEFT JOIN USER_CONSTRAINTS UC ON UC.CONSTRAINT_NAME = UCC.CONSTRAINT_NAME
+			WHERE COL.TABLE_NAME = UPPER(#{tableName})
+		) TEMP
+		WHERE TEMP.ROW_FLG = 1
+		ORDER BY TEMP.COLUMN_ID
+	</select>
+
+</mapper>

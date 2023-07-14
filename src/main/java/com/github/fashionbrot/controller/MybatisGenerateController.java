@@ -1,0 +1,88 @@
+package com.github.fashionbrot.controller;
+
+
+import com.github.fashionbrot.entity.ColumnEntity;
+import com.github.fashionbrot.entity.TableEntity;
+import com.github.fashionbrot.request.GenerateRequest;
+import com.github.fashionbrot.response.Response;
+import com.github.fashionbrot.service.DruidService;
+import com.github.fashionbrot.service.MybatisGenerateService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+public class MybatisGenerateController {
+
+
+    final MybatisGenerateService mybatisGenerateService;
+    final DruidService druidService;
+    final HttpServletResponse response;
+
+    @GetMapping("/")
+    public String index(){
+        return "index";
+    }
+
+
+    /**
+     * 列表
+     */
+    @ResponseBody
+    @RequestMapping("/list")
+    public Response<List<TableEntity>> list(GenerateRequest request){
+        return Response.success(druidService.queryList(request));
+    }
+
+
+    /**
+     * 字段列表
+     */
+    @ResponseBody
+    @RequestMapping("/columnList")
+    public Response<List<ColumnEntity>> columnList(GenerateRequest request){
+        return Response.success(druidService.queryTableColumns(request));
+    }
+
+
+
+
+    /**
+     * 生成代码 下载文件
+     */
+    @ResponseBody
+    @RequestMapping("/generateZip")
+    public void generateZip(GenerateRequest request) {
+        byte[] data = null;//quickService.generatorZip( req);
+        try {
+            response.reset();
+            response.setHeader("Content-Disposition", ("attachment; filename=\"quick.zip\""));
+            response.addHeader("Content-Length", "" + data.length);
+            response.setContentType("application/octet-stream; charset=UTF-8");
+            IOUtils.write(data, response.getOutputStream());
+        }catch (Exception e){
+            log.error("generateZip error",e);
+        }
+    }
+
+    /**
+     * 生成代码 到本地
+     */
+    @ResponseBody
+    @RequestMapping("/generate")
+    public Response generate(GenerateRequest request)  {
+//        quickService.generatorCode( req);
+        return Response.success();
+    }
+
+
+}

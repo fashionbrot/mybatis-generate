@@ -1,0 +1,91 @@
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "2.6.0"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+
+}
+
+group 'com.github.fashionbrot'
+version '0.0.1'
+
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+// 指定java版本
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+processResources {
+    from('src/main/java') {
+        include '**/**Mapper.xml'
+    }
+}
+
+configurations {
+    all*.exclude group:"ch.qos.logback", module:""
+    all*.exclude group:"org.apache.logging", module:""
+    all*.exclude group:"org.springframework.boot", module:"spring-boot-starter-logging"
+    all*.exclude group:"com.zaxxer", module:""
+}
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://maven.aliyun.com/repository/public" }
+    maven { url "https://maven.aliyun.com/repository/jcenter" }
+    maven { url "https://maven.aliyun.com/repository/spring" }
+    maven { url "https://maven.aliyun.com/repository/spring-plugin" }
+    maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+    maven { url "https://maven.aliyun.com/repository/google" }
+    maven { url "https://maven.aliyun.com/repository/grails-core" }
+    maven { url "https://maven.aliyun.com/repository/apache-snapshots" }
+    maven { url 'https://repo.spring.io/plugins-snapshot' }
+}
+
+ext{
+    velocity = 2.2
+    tinylog_version="2.4.1"
+}
+
+dependencies {
+
+    developmentOnly "org.springframework.boot:spring-boot-devtools:2.6.4"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    implementation "org.springframework.boot:spring-boot-starter-logger"
+
+
+    implementation "org.apache.velocity:velocity-engine-core:${velocity}"
+    implementation 'org.apache.velocity.tools:velocity-tools-generic:3.0'
+
+    implementation 'org.apache.commons:commons-lang3:3.10'
+    implementation 'commons-io:commons-io:2.5'
+
+
+
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.0'
+    implementation 'com.alibaba:druid:1.2.8'
+
+    implementation 'com.alibaba.fastjson2:fastjson2:2.0.35'
+
+    implementation "mysql:mysql-connector-java"
+    implementation 'com.oracle:ojdbc6:11.2.0.3'
+    implementation 'com.microsoft.sqlserver:sqljdbc4:4.0'
+
+    implementation 'com.baomidou:mybatis-plus-generator:3.5.1'
+
+
+}
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
