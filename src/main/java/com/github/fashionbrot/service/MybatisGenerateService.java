@@ -4,7 +4,6 @@ package com.github.fashionbrot.service;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.github.fashionbrot.config.GenerateOut;
 import com.github.fashionbrot.config.GenerateTemplate;
-import com.github.fashionbrot.config.VmConfig;
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
 import com.github.fashionbrot.enums.DatabaseEnum;
