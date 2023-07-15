@@ -1,11 +1,11 @@
 package com.github.fashionbrot.controller;
 
-import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.github.fashionbrot.request.DatabaseRequest;
 import com.github.fashionbrot.response.Response;
 import com.github.fashionbrot.service.DruidService;
 import com.github.fashionbrot.util.FileUtil;
+import com.github.fashionbrot.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +67,7 @@ public class DruidController {
 
         String filePath = path + marsQuickCacheName;
         FileUtil.deleteFile(new File(filePath));
-        FileUtil.writeFile(new File(filePath), JSON.toJSONString(old));
+        FileUtil.writeFile(new File(filePath), JsonUtil.toString(old));
         return Response.success();
     }
 

@@ -91,6 +91,34 @@ public class GenerateRequest {
     private String compileType;
 
     /**
+     * 插入表 填充字段 多个逗号分割
+     */
+    private String fieldInsertFillNames;
+    /**
+     * 更新表 填充字段 多个逗号分割
+     */
+    private String fieldUpdateFillNames;
+    /**
+     * 如果是Date 类型增加
+     */
+    private String dateFormatValue="yyyy-MM-dd HH:mm:ss";
+    /**
+     * 逻辑删除默认值
+     */
+    private String tableLogicValue="0";
+    /**
+     * 逻辑删除”删除值“默认值
+     */
+    private String tableLogicDeleteValue="1";
+    /**
+     * 乐观锁标记字段
+     */
+    private String versionFieldName;
+    /**
+     * 删除标记字段
+     */
+    private String deleteFieldName;
+    /**
      * 实体类 是否序列化
      */
     private Boolean serialVersionUIDEnable;

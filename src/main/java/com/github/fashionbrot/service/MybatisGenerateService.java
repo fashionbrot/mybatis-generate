@@ -10,16 +10,14 @@ import com.github.fashionbrot.entity.TableEntity;
 import com.github.fashionbrot.enums.DatabaseEnum;
 import com.github.fashionbrot.exception.MybatisGenerateException;
 import com.github.fashionbrot.request.GenerateRequest;
-import com.github.fashionbrot.util.FileUtil;
-import com.github.fashionbrot.util.GenericTokenUtil;
-import com.github.fashionbrot.util.MethodUtil;
-import com.github.fashionbrot.util.ObjectUtil;
+import com.github.fashionbrot.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -39,7 +37,7 @@ public class MybatisGenerateService {
     final DatabaseService databaseService;
     final DataTypeService dataTypeService;
 
-    final VmConfig vmConfig;
+    final TemplateService templateService;
 
     public void generatorCode(GenerateRequest request) {
 
@@ -73,19 +71,22 @@ public class MybatisGenerateService {
         List<GenerateOut> generateOutList= new ArrayList<>();
         VelocityContext context = initTableColumn(velocityContext, tableName);
         Map<String, Object> contextMap = transform(context);
-        List<GenerateTemplate> vms = vmConfig.getVms();
-        if (ObjectUtil.isNotEmpty(vms)){
-            for (int i = 0; i < vms.size(); i++) {
-                GenerateTemplate template = vms.get(i);
+        List<GenerateTemplate> templateList = templateService.getTemplate();
+        if (ObjectUtil.isNotEmpty(templateList)){
+            for (int i = 0; i < templateList.size(); i++) {
+                GenerateTemplate t = templateList.get(i);
+                GenerateTemplate template = new GenerateTemplate();
+                BeanUtils.copyProperties(t,template);
 
-                String enableVariable = GenericTokenUtil.parse(template.getEnable(), contextMap);
-                if (!ObjectUtil.parseBoolean(enableVariable)){
+                boolean enable = ObjectUtil.parseBoolean(GenericTokenUtil.parse(template.getEnable(), contextMap));
+                if (!enable){
                     continue;
                 }
+                log.info("contentMap",JsonUtil.toString(contextMap));
 
                 template.setTemplatePath( GenericTokenUtil.parse(template.getTemplatePath(), contextMap));
-                template.setOutFilePath( GenericTokenUtil.parse(template.getOutFilePath(), contextMap));
-                template.setOutFileName(GenericTokenUtil.parse(template.getOutFileName(), contextMap));
+                template.setOutFilePath( replaceAll(GenericTokenUtil.parse(template.getOutFilePath(), contextMap)));
+                template.setOutFileName(replaceAll(GenericTokenUtil.parse(template.getOutFileName(), contextMap)));
                 template.setOutFileSuffix(GenericTokenUtil.parse(template.getOutFileSuffix(), contextMap));
 
                 StringWriter templateValue = getTemplateValue(template.getTemplatePath(), context);
@@ -134,24 +135,27 @@ public class MybatisGenerateService {
         if (tableEntity==null){
             MybatisGenerateException.throwMsg(tableName+"表不存在，请刷新重试");
         }
+        context.put("tableNameDescription",tableEntity.getComments());
         String excludePrefix = ObjectUtil.formatString(context.get("excludePrefix"));
 
         String className = tableToJava(tableName, excludePrefix);
+        context.put("className",className);
         tableEntity.setClassName(className);
         tableEntity.setVariableClassName(StringUtils.uncapitalize(className));
 
 
         List<ColumnEntity> columns = baseMapper.queryColumns(tableName);
-        setDataType(context,tableEntity, columns);
+        //解析主键、数据库关键字、属性转换
+        setDataType(context, columns);
+
         tableEntity.setColumns(columns);
-        //description
 
         Boolean serialVersionUIDEnable = (Boolean) context.get("serialVersionUIDEnable");
         if (ObjectUtil.isBoolean(serialVersionUIDEnable)){
             context.put("serialVersionUID",IdWorker.getId());
         }
         setMapperColumn(context, tableEntity);
-        context.put("tableField",tableEntity);
+        context.put("tableFieldList",tableEntity.getColumns());
 
         return context;
     }
@@ -173,15 +177,32 @@ public class MybatisGenerateService {
     }
 
 
-    private void setDataType(VelocityContext context,TableEntity tableEntity, List<ColumnEntity> columns) {
+    private void setDataType(VelocityContext context, List<ColumnEntity> columns) {
+        String  deleteFieldName = ObjectUtil.formatString(context.get("deleteFieldName"));
+        String  versionFieldName = ObjectUtil.formatString(context.get("versionFieldName"));
+
+        String  fieldInsertFillNames = ObjectUtil.formatString(context.get("fieldInsertFillNames"));
+        String  fieldUpdateFillNames = ObjectUtil.formatString(context.get("fieldUpdateFillNames"));
+
 
         for(ColumnEntity columnEntity: columns){
+
+            setFieldInsertFill(columnEntity,fieldInsertFillNames);
+            setFieldUpdateFill(columnEntity,fieldUpdateFillNames);
             //列名转换成Java属性名
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setAttrName(attrName);
             columnEntity.setVariableAttrName(ObjectUtil.uncapitalize(attrName));
 
             columnEntity.setColumnNameXmlUse(columnEntity.getColumnName());
+
+            if (attrName.equals(deleteFieldName)){
+                columnEntity.setDeleteLogic(true);
+            }
+            if (attrName.equals(versionFieldName)){
+                columnEntity.setVersionLogic(true);
+            }
+            columnEntity.setGetSetName(NameUtil.captureName(attrName));
 
             columnEntity.setColumnName(baseMapper.formatColumn(columnEntity.getColumnName()));
 
@@ -190,8 +211,25 @@ public class MybatisGenerateService {
             if (attrType.equalsIgnoreCase("BigDecimal" )) {
                 context.internalPut("hasBigDecimal",true);
             }
-            if ( baseMapper.isKeyIdentity(columnEntity)){
-                tableEntity.setPrimaryKeyColumnEntity(columnEntity);
+
+            columnEntity.setPrimaryKey(baseMapper.isKeyIdentity(columnEntity));
+
+        }
+    }
+
+    public void setFieldInsertFill(ColumnEntity columnEntity,String fieldInsertFillNames){
+        if (ObjectUtil.isNotEmpty(fieldInsertFillNames)){
+            Optional<String> first = Arrays.stream(fieldInsertFillNames.split(",")).filter(m -> m.equalsIgnoreCase(columnEntity.getColumnName())).findFirst();
+            if (first.isPresent()){
+                columnEntity.setInsertFill(true);
+            }
+        }
+    }
+    public void setFieldUpdateFill(ColumnEntity columnEntity,String fieldUpdateFillNames){
+        if (ObjectUtil.isNotEmpty(fieldUpdateFillNames)){
+            Optional<String> first = Arrays.stream(fieldUpdateFillNames.split(",")).filter(m -> m.equalsIgnoreCase(columnEntity.getColumnName())).findFirst();
+            if (first.isPresent()){
+                columnEntity.setUpdateFill(true);
             }
         }
     }
@@ -203,7 +241,8 @@ public class MybatisGenerateService {
         if(ObjectUtil.isNotEmpty(tablePrefix)){
             tableName = tableName.replaceFirst(tablePrefix, "");
         }
-        return columnToJava(tableName);
+        String s = columnToJava(tableName);
+        return NameUtil.captureName(s);
     }
 
 
@@ -245,6 +284,11 @@ public class MybatisGenerateService {
     }
 
 
+    private String replaceAll(String str){
+        return str.replaceAll("\\.", Matcher.quoteReplacement(File.separator))
+                .replaceAll("/",Matcher.quoteReplacement(File.separator))
+                .replaceAll("\\\\",Matcher.quoteReplacement(File.separator));
+    }
 
 
 

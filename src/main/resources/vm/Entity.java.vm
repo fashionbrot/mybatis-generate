@@ -1,16 +1,22 @@
-package ${package}${entityOut};
+package ${packageOut}${entityOut};
 
+#if($mybatisPlusEnable)
 import com.baomidou.mybatisplus.annotation.*;
+#end
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+#if($serialVersionUIDEnable)
 import java.io.Serializable;
+#end
+#if($lombokEnable)
 import lombok.*;
+#end
 
-#if (${swaggerStatus})
+#if (${swagger2Enable})
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 #end
-#if(${swaggerStatus3})
+#if(${swagger3Enable})
 import io.swagger.v3.oas.annotations.media.Schema;
 #end
 #if(${hasBigDecimal})
@@ -19,26 +25,78 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * ${commentsEntity}
+ * ${tableNameDescription}
  *
 #if(${author})
  * @author ${author}
 #end
  */
-@TableName("${oldTableName}")
-#if (${swaggerStatus})
-@ApiModel(value = "${commentsEntity}")
+#if($mybatisPlusEnable)
+@TableName("${tableName}")
 #end
-#if(${swaggerStatus3})
-@Schema(description = "${commentsEntity}")
+#if (${swagger2Enable})
+@ApiModel(value = "${tableNameDescription}")
 #end
+#if(${swagger3Enable})
+@Schema(description = "${tableNameDescription}")
+#end
+#if($lombokEnable)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-public class ${className}${entitySuffix} implements Serializable {
-    private static final long serialVersionUID = ${serialVersionUID}L;
+#end
+public class ${className}${entitySuffix} #if($serialVersionUIDEnable)implements Serializable#end {
+	#if($serialVersionUIDEnable)
+	private static final long serialVersionUID = ${serialVersionUID}L;
+	#end
+
+#foreach($field in $tableFieldList)
+
+	#if (${swagger2Enable})
+	@ApiModelProperty(value = "$field.comments")
+	#elseif(${swagger3Enable})
+	@Schema(description = "$field.comments")
+	#else
+	/**
+	 * $field.comments
+	 */
+	#end
+	#if($field.attrType=='Date')
+	@DateTimeFormat(pattern = "${dateFormatValue}")
+	@JsonFormat(timezone = "GMT+8", pattern = "${dateFormatValue}")
+	#end
+	#if($mybatisPlusEnable)
+	#if($field.primaryKey)
+	@TableId(type = IdType.ASSIGN_ID)
+	#else
+	#if($field.deleteLogic)
+	@TableLogic(value = "${tableLogicValue}", delval = "${tableLogicDeleteValue}")
+	#end
+	#if($field.versionLogic)
+	@Version
+	#end
+	@TableField(value = "${field.columnName}"#if($field.insertFill), fill = FieldFill.INSERT#elseif($field.updateFill), fill = FieldFill.UPDATE#end)
+	#end
+	#end
+	private $field.attrType $field.variableAttrName;
+#end
+
+#foreach($field in $tableFieldList)
+	#if(!$lombokEnable)
+	public ${field.attrType} get${field.getSetName}() {
+		return $field.variableAttrName;
+	}
+
+	public void set${field.getSetName}(${field.attrType} $field.variableAttrName) {
+		this.$field.variableAttrName = $field.variableAttrName;
+	}
+	#end
+#end
+
+
+
 
 #foreach ($column in $columns)
 

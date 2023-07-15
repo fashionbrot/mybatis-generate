@@ -1,5 +1,6 @@
 package com.github.fashionbrot.util;
 
+import com.github.fashionbrot.config.GenerateTemplate;
 import com.github.fashionbrot.consts.GlobalConst;
 import lombok.extern.slf4j.Slf4j;
 
@@ -187,5 +188,7 @@ public class FileUtil {
         }
 
     }
+
+
 
 }

@@ -84,7 +84,20 @@ public class MybatisGenerateController {
         request = GenerateRequest.builder()
                 .selectTableNames("banner")
                 .author("张三")
+                .out("E:\\dev\\idea\\projects\\Sample")
+                .packageOut("com.jinxing.electric")
+                .sourceSetJava("\\src\\main\\java")
                 .entityEnable(true)
+                .entityOut(".entity")
+                .entitySuffix("Entity")
+                .serialVersionUIDEnable(true)
+                .swagger2Enable(false)
+                .swagger3Enable(false)
+                .mybatisPlusEnable(true)
+                .lombokEnable(true)
+                .dateFormatValue("yyyy-MM-dd HH:mm:ss")
+                .fieldInsertFillNames("create_date")
+                .fieldUpdateFillNames("update_date")
                 .build();
 
         mybatisGenerateService.generatorCode(request);

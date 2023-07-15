@@ -1,7 +1,7 @@
 package com.github.fashionbrot.service;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.fastjson2.JSON;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.fashionbrot.consts.GlobalConst;
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
@@ -9,7 +9,6 @@ import com.github.fashionbrot.exception.MybatisGenerateException;
 import com.github.fashionbrot.mapper.BaseMapper;
 import com.github.fashionbrot.request.DatabaseRequest;
 import com.github.fashionbrot.request.GenerateRequest;
-import com.github.fashionbrot.response.PageResponse;
 import com.github.fashionbrot.util.FileUtil;
 import com.github.fashionbrot.util.JsonUtil;
 import com.github.fashionbrot.util.ObjectUtil;
@@ -64,7 +63,7 @@ public class DruidService {
             if (ObjectUtil.isEmpty(fileContent)) {
                 return null;
             }
-            return JsonUtil.parseArray(DatabaseRequest.class, fileContent);
+            return JsonUtil.parseArray(fileContent, new TypeReference<List<DatabaseRequest>>() {});
         }
         return null;
     }
@@ -94,7 +93,7 @@ public class DruidService {
         if (ObjectUtil.isNotEmpty(files)) {
             old.add(req);
             String fileContent = FileUtil.getFileContent(files.get(0));
-            List<DatabaseRequest> databases = JsonUtil.parseArray(DatabaseRequest.class, fileContent);
+            List<DatabaseRequest> databases = JsonUtil.parseArray(fileContent, new TypeReference<List<DatabaseRequest>>() {});
             if (ObjectUtil.isNotEmpty(databases)) {
                 for (int i = 0; i < databases.size(); i++) {
                     DatabaseRequest databaseReq = databases.get(i);
@@ -108,7 +107,7 @@ public class DruidService {
         }
 
         FileUtil.deleteFile(new File(filePath));
-        FileUtil.writeFile(new File(filePath), JSON.toJSONString(old));
+        FileUtil.writeFile(new File(filePath), JsonUtil.toString(old));
 
         druidDataSource.setUsername(req.getUsername());
         druidDataSource.setPassword(req.getPassword());

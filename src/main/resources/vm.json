@@ -1,0 +1,9 @@
+[
+  {
+    "enable": "${entityEnable}",
+    "templatePath": "vm/Entity.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${entityOut}",
+    "outFileName": "${className}${entitySuffix}",
+    "outFileSuffix": ".java"
+  }
+]
