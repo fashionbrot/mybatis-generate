@@ -56,12 +56,19 @@ public class MybatisGenerateService {
 
             List<GenerateOut> generateOutList = getGenerateOutList(velocityContext, tableName);
             if (ObjectUtil.isNotEmpty(generateOutList)){
-                generateOutList.forEach(m->{
-                    FileUtil.createFile(m.getFileFullPath(),m.getTemplateValue().toString());
+                generateOutList.forEach(template->{
+                    FileUtil.createFile(template.getFileFullPath(),template.getTemplateValue().toString());
                 });
             }
-
         }
+
+        List<GenerateOut> fixedGenerateOutList = getFixedGenerateOutList(velocityContext);
+        if (ObjectUtil.isNotEmpty(fixedGenerateOutList)){
+            fixedGenerateOutList.forEach(template->{
+                FileUtil.createFile(template.getFileFullPath(),template.getTemplateValue().toString());
+            });
+        }
+
     }
 
 
@@ -98,6 +105,39 @@ public class MybatisGenerateService {
             }
         }
 
+        return generateOutList;
+    }
+
+    private List<GenerateOut> getFixedGenerateOutList(VelocityContext context){
+        List<GenerateOut> generateOutList= new ArrayList<>();
+        Map<String, Object> contextMap = transform(context);
+        List<GenerateTemplate> templateList = templateService.getFixedTemplate();
+        if (ObjectUtil.isNotEmpty(templateList)){
+            for (int i = 0; i < templateList.size(); i++) {
+                GenerateTemplate t = templateList.get(i);
+                GenerateTemplate template = new GenerateTemplate();
+                BeanUtils.copyProperties(t,template);
+
+                boolean enable = ObjectUtil.parseBoolean(GenericTokenUtil.parse(template.getEnable(), contextMap));
+                if (!enable){
+                    continue;
+                }
+
+
+                template.setTemplatePath( GenericTokenUtil.parse(template.getTemplatePath(), contextMap));
+                template.setOutFilePath( replaceAll(GenericTokenUtil.parse(template.getOutFilePath(), contextMap)));
+                template.setOutFileName(replaceAll(GenericTokenUtil.parse(template.getOutFileName(), contextMap)));
+                template.setOutFileSuffix(GenericTokenUtil.parse(template.getOutFileSuffix(), contextMap));
+
+                StringWriter templateValue = getTemplateValue(template.getTemplatePath(), context);
+                String fileFullPath = getFileFullPath(template);
+
+                generateOutList.add(GenerateOut.builder()
+                        .templateValue(templateValue)
+                        .fileFullPath(fileFullPath)
+                        .build());
+            }
+        }
         return generateOutList;
     }
 
@@ -141,7 +181,7 @@ public class MybatisGenerateService {
         context.put("className",className);
         tableEntity.setClassName(className);
         tableEntity.setVariableClassName(StringUtils.uncapitalize(className));
-
+        context.put("variableClassName",tableEntity.getVariableClassName());
 
         List<ColumnEntity> columns = baseMapper.queryColumns(tableName);
         //解析主键、数据库关键字、属性转换

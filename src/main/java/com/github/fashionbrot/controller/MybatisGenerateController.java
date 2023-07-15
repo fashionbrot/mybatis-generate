@@ -87,17 +87,56 @@ public class MybatisGenerateController {
                 .out("E:\\dev\\idea\\projects\\Sample")
                 .packageOut("com.jinxing.electric")
                 .sourceSetJava("\\src\\main\\java")
-                .entityEnable(true)
-                .entityOut(".entity")
-                .entitySuffix("Entity")
+
                 .serialVersionUIDEnable(true)
-                .swagger2Enable(false)
+                .swagger2Enable(true)
                 .swagger3Enable(false)
-                .mybatisPlusEnable(true)
+                .mybatisPlusEnable(false)
                 .lombokEnable(true)
+
                 .dateFormatValue("yyyy-MM-dd HH:mm:ss")
                 .fieldInsertFillNames("create_date")
                 .fieldUpdateFillNames("update_date")
+
+                .entityEnable(false)
+                .entityOut(".entity")
+                .entitySuffix("Entity")
+
+                .mapperEnable(false)
+                .mapperOut(".mapper")
+                .mapperSuffix("Mapper")
+
+                .mapperXmlEnable(false)
+                .mapperXmlOut(".mapper.xml")
+                .mapperXmlSuffix("Mapper")
+
+                .serviceEnable(true)
+                .serviceOut(".service")
+                .serviceSuffix("Service")
+
+                .serviceImplEnable(true)
+                .serviceImplOut(".service.impl")
+                .serviceImplSuffix("ServiceImpl")
+
+                .controllerEnable(true)
+                .controllerOut(".controller")
+                .controllerSuffix("Controller")
+
+                .requestEnable(true)
+                .requestOut(".request")
+                .requestSuffix("Request")
+
+                .responseClassName("Response")
+                .responseOut(".response")
+                .responseEnable(true)
+                .responseSuffix("Response")
+
+                .mapperXmlInsertsEnable(true)
+                .mapperXmlInsertEnable(true)
+                .mapperXmlDeleteByIdEnable(true)
+                .mapperXmlSelectByIdEnable(true)
+                .mapperXmlUpdateByIdEnable(true)
+
                 .build();
 
         mybatisGenerateService.generatorCode(request);

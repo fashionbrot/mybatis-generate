@@ -1,0 +1,30 @@
+package ${packageOut}${serviceOut};
+
+#if($mybatisPlusEnable)
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+#end
+import ${packageOut}${entityOut}.${className}${entitySuffix};
+#if (${customPageListInterfaceEnable})
+import ${packageOut}${requestOut}.${className}${requestSuffix};
+#end
+import ${packageOut}${responseOut}.Page${responseSuffix};
+
+import java.util.List;
+import java.util.Map;
+import java.io.Serializable;
+import java.util.Collection;
+
+/**
+ * ${tableNameDescription}
+ *
+#if(${author})
+ * @author ${author}
+#end
+ */
+public interface ${className}${serviceSuffix}  #if($mybatisPlusEnable)extends IService<${className}${entitySuffix}>#end{
+
+    #if (${customPageListInterfaceEnable})
+    Object pageList(${className}${requestSuffix} ${requestSuffixLowerCase});
+    #end
+}

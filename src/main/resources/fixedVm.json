@@ -1,0 +1,23 @@
+[
+  {
+    "enable": "${responseEnable}",
+    "templatePath": "fixedVm/Response.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${responseOut}",
+    "outFileName": "${responseClassName}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${responseEnable}",
+    "templatePath": "fixedVm/PageResponse.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${responseOut}",
+    "outFileName": "Page${responseClassName}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${requestEnable}",
+    "templatePath": "fixedVm/PageRequest.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${requestOut}",
+    "outFileName": "Page${requestSuffix}",
+    "outFileSuffix": ".java"
+  }
+]

@@ -1,0 +1,184 @@
+package ${packageOut}${controllerOut};
+
+
+import ${packageOut}${entityOut}.${className}${entitySuffix};
+import ${packageOut}${serviceOut}.${className}${serviceSuffix};
+import ${packageOut}${requestOut}.Page${requestSuffix};
+#if (${pageListStatus})
+import ${packageOut}${requestOut}.${className}${requestSuffix};
+#end
+import ${packageOut}${responseOut}.Page${responseSuffix};
+import ${packageOut}${responseOut}.${responseClassName};
+#if(${permissionEnable})
+import ${packageOut}${permissionOut}.${permissionClassName};
+#end
+#if (${swagger2Enable})
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
+#end
+#if (${swagger3Enable})
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+#end
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
+import java.util.Collection;
+#if($lombokEnable)
+import lombok.*;
+#end
+
+
+
+#if (${swagger2Enable})
+@Api(tags="01、${tableNameDescription}")
+#end
+#if (${swagger3Enable})
+@Tag(name="${tableNameDescription}")
+#end
+@RequestMapping("/${requestMappingPath}")
+@Controller
+#if($lombokEnable)
+@RequiredArgsConstructor
+#end
+public class ${className}${controllerSuffix}  {
+
+    /**
+     * 权限 注解 MarsPermission
+     * 默认接口以下
+     * 分页       ${pathName}/pageList    权限：${apiPermission}:pageList
+     * 数据列表    ${pathName}/list        权限：${apiPermission}:list
+     * 根据id查询  ${pathName}/getById     权限：${apiPermission}:getById
+     * 新增       ${pathName}/insert      权限：${apiPermission}:insert
+     * 修改       ${pathName}/updateById  权限：${apiPermission}:updateById
+     * 根据id删除  ${pathName}/deleteById  权限：${apiPermission}:deleteById
+     * 多个id删除  ${pathName}/deleteByIds 权限：${apiPermission}:deleteByIds
+     */
+
+
+    #if($lombokEnable)
+    final ${className}${serviceSuffix}  ${variableClassName}${serviceSuffix};
+    #else
+    @Resource
+    private ${className}${serviceSuffix}  ${variableClassName}${serviceSuffix};
+    #end
+
+    #if (${customPageListInterfaceEnable})
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:pageList")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="分页列表",description = "分页列表")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "分页列表", notes = "分页列表")
+    #end
+    @GetMapping("/pageList")
+    @ResponseBody
+    public ${responseClassName}<Page${responseSuffix}<List<${className}${entitySuffix}>>> pageList(${className}${requestSuffix} ${requestSuffixLowerCase}) {
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.pageList(${requestSuffixLowerCase}));
+    }
+    #end
+
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:list")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="数据列表",description = "数据列表")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "数据列表", notes = "数据列表")
+    #end
+    @GetMapping("/list")
+    @ResponseBody
+    public ${responseClassName}<List<${className}${entitySuffix}>> list(@RequestParam Map<String, Object> params){
+        return  ${responseClassName}.success( ${variableClassName}${serviceSuffix}.listByMap(params));
+    }
+
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:getById")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="根据id查询",description = "根据id查询")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "根据id查询", notes = "根据id查询")
+    #end
+    @GetMapping("/getById")
+    @ResponseBody
+    public ${responseClassName}<${className}${entitySuffix}> getById(${pkAttrType} id){
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.getById(id));
+    }
+
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:insert")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="新增",description = "新增")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "新增", notes = "新增")
+    #end
+    @PostMapping("/insert")
+    @ResponseBody
+    public ${responseClassName} insert(@RequestBody ${className}${entitySuffix} entity){
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.save(entity));
+    }
+
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:updateById")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="修改",description = "修改")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "修改", notes = "修改")
+    #end
+    @PostMapping("/updateById")
+    @ResponseBody
+    public ${responseClassName} updateById(@RequestBody ${className}${entitySuffix} entity){
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.updateById(entity));
+    }
+
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:deleteById")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="根据id删除",description = "根据id删除")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "根据id删除", notes = "根据id删除")
+    #end
+    @PostMapping("/deleteById")
+    @ResponseBody
+    public ${responseClassName} deleteById(${pkAttrType} id){
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.removeById(id));
+    }
+
+    #if(${permissionEnable})
+    @${permissionClassName}("${apiPermission}:deleteByIds")
+    #end
+    #if (${swagger3Enable})
+    @Operation(summary="批量删除",description = "批量删除")
+    #end
+    #if (${swagger2Enable})
+    @ApiOperation(value = "批量删除", notes = "批量删除")
+    #end
+    @PostMapping("/deleteByIds")
+    @ResponseBody
+    public ${responseClassName} deleteByIds(${pkAttrType}[] ids){
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.removeByIds(Arrays.asList(ids)));
+    }
+
+
+
+}

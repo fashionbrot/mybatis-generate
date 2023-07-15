@@ -1,0 +1,105 @@
+package ${packageOut}${responseOut};
+
+
+#if (${swagger2Enable})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${swagger3Enable})
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+#if($lombokEnable)
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+#end
+import java.io.Serializable;
+
+/**
+ *
+#if(${author})
+ * @author ${author}
+#end
+ */
+#if($lombokEnable)
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+#end
+#if (${swagger2Enable})
+@ApiModel("${responseClassName}")
+#end
+#if(${swagger3Enable})
+@Schema(title = "${responseClassName}")
+#end
+public class ${responseClassName}<T> implements Serializable{
+    private static final long serialVersionUID = -3655390020082644681L;
+
+    public static final int SUCCESS = 0;
+    public static final int FAILED = 1;
+
+
+    #if (${swagger2Enable})
+    @ApiModelProperty(value = "0成功,其他失败")
+    #elseif(${swagger3Enable})
+    @Schema(description = "0成功,其他失败")
+    #else
+    /**
+     * 0成功,其他失败
+     */
+    #end
+    private int code;
+    #if (${swagger2Enable})
+    @ApiModelProperty(value = "消息")
+    #elseif(${swagger3Enable})
+    @Schema(description = "消息")
+    #else
+    /**
+     * 消息
+     */
+    #end
+    private String msg;
+    #if (${swagger2Enable})
+    @ApiModelProperty(value = "数据")
+    #elseif(${swagger3Enable})
+    @Schema(description = "数据")
+    #else
+    /**
+     * 数据
+     */
+    #end
+    private T data;
+
+#if($lombokEnable)
+    public static ${responseClassName} fail(String msg){
+        return ${responseClassName}.builder().code(FAILED).msg(msg).build();
+    }
+
+    public static ${responseClassName} fail(String msg, int code){
+        return ${responseClassName}.builder().code(code).msg(msg).build();
+    }
+
+    public static<T> ${responseClassName} success(T data){
+        return ${responseClassName}.builder().code(SUCCESS).msg("成功").data(data).build();
+    }
+
+    public static ${responseClassName} success(){
+        return ${responseClassName}.success(null);
+    }
+#else
+    public static<T> ${responseClassName} success(T data){
+        ${responseClassName} response =  new ${responseClassName}();
+        response.setData(data);
+        response.setCode(SUCCESS);
+        return response;
+    }
+
+    public static ${responseClassName} success(){
+        ${responseClassName} response =  new ${responseClassName}();
+        response.setCode(SUCCESS);
+        return response;
+    }
+#end
+}

@@ -18,6 +18,7 @@ import java.util.List;
 public class TemplateService {
 
     private List<GenerateTemplate> generateTemplates=new ArrayList<>();
+    private List<GenerateTemplate> fixedTemplates=new ArrayList<>();
 
     public List<GenerateTemplate> getTemplate()  {
         if (ObjectUtil.isNotEmpty(generateTemplates)){
@@ -27,6 +28,16 @@ public class TemplateService {
         InputStream inputStream = this.getClass().getResourceAsStream(path);
         generateTemplates = JsonUtil.parseInputStream(inputStream, new TypeReference<List<GenerateTemplate>>() {});
         return generateTemplates;
+    }
+
+    public List<GenerateTemplate> getFixedTemplate()  {
+        if (ObjectUtil.isNotEmpty(fixedTemplates)){
+            return fixedTemplates;
+        }
+        String path = "/fixedVm.json";
+        InputStream inputStream = this.getClass().getResourceAsStream(path);
+        fixedTemplates = JsonUtil.parseInputStream(inputStream, new TypeReference<List<GenerateTemplate>>() {});
+        return fixedTemplates;
     }
 
 

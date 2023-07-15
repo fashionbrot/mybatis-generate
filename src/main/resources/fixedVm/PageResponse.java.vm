@@ -1,0 +1,46 @@
+package ${packageOut}${responseOut};
+
+#if (${swagger2Enable})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${swagger3Enable})
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+#if($lombokEnable)
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+#end
+import java.util.List;
+
+#if($lombokEnable)
+@Data
+@Builder
+@AllArgsConstructor
+#end
+#if (${swagger2Enable})
+@ApiModel("Page${responseSuffix}")
+#end
+#if(${swagger3Enable})
+@Schema(title = "Page${responseSuffix}")
+#end
+public class Page${responseSuffix}<T> {
+
+    #if (${swagger2Enable})
+    @ApiModelProperty("数据")
+    #end
+    #if(${swagger3Enable})
+    @Schema(description = "数据")
+    #end
+    private List<T> rows;
+
+    #if (${swagger2Enable})
+    @ApiModelProperty("总数")
+    #end
+    #if(${swagger3Enable})
+    @Schema(description = "总数")
+    #end
+    private long total;
+
+}

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${packageOut}${mapperOut}.${className}${mapperSuffix}">
+
+    #if ($mapperXmlAliasStatus)
+
+        <resultMap type="${variableClassName}${entitySuffix}" id="${variableClassName}Map">
+            #foreach($field in $tableFieldList)
+                <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
+            #end
+        </resultMap>
+
+    #else
+
+        <resultMap type="${packageOut}${entityOut}.${className}${entitySuffix}" id="${variableClassName}Map">
+            #foreach($field in $tableFieldList)
+                <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
+            #end
+        </resultMap>
+
+    #end
+
+    <sql id="allColumn">
+        ${allColumn}
+    </sql>
+
+    <sql id="allColumnAlias">
+        ${allColumnAlias}
+    </sql>
+
+    #if (${mapperXmlInsertEnable})
+    <insert id="insert" parameterType="${packageOut}${entityOut}.${className}${entitySuffix}">
+        insert into ${tableName}(
+            #foreach($column in $tableFieldList)
+                #if($column.primaryKey)
+                    #if($column.attrType == 'String')
+                        ${column.columnName},
+                    #end
+                #else
+                    ${column.columnName} #if($foreach.count != $columns.size()),#end
+                #end
+            #end
+        ) values
+            (
+            #foreach($column in $tableFieldList)
+                #if($column.primaryKey)
+                    #if($column.attrType == 'String')
+                            #{${column.columnName}},
+                    #end
+                #else
+                        #{${column.variableAttrName}}#if($foreach.count != $columns.size()),#end
+                #end
+            #end
+            )
+    </insert>
+    #end
+
+
+    #if (${mapperXmlInsertsEnable})
+    <insert id="insertList" parameterType="java.util.List">
+        insert into ${tableName}(
+        #foreach($column in $tableFieldList)
+            #if($column.primaryKey)
+                #if($column.attrType == 'String')
+                    ${column.columnName},
+                #end
+            #else
+                ${column.columnName} #if($foreach.count != $columns.size()),#end
+            #end
+        #end
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #foreach($column in $tableFieldList)
+                #if($column.primaryKey)
+                    #if($column.attrType == 'String')
+                        #{item.${column.columnName}},
+                    #end
+                #else
+                    #{item.${column.variableAttrName}}#if($foreach.count != $columns.size()),#end
+                #end
+            #end
+            )
+        </foreach>
+    </insert>
+    #end
+
+    #if (${mapperXmlUpdateByIdEnable})
+    <update id="updateById" parameterType="${packageOut}${entityOut}.${className}${entitySuffix}">
+        update ${tableName}
+        <set>
+            #foreach($column in $tableFieldList)
+                #if(!$column.primaryKey)
+                    ${column.columnName}=#{${column.variableAttrName}}#if($foreach.count != $columns.size()),#end
+                #end
+            #end
+        </set>
+        #foreach($column in $tableFieldList)
+            #if($column.primaryKey)
+        where ${column.columnName}=#{${column.variableAttrName}}
+            #end
+        #end
+    </update>
+    #end
+
+    #if (${mapperXmlDeleteByIdEnable})
+    <delete id="deleteById">
+        delete from ${tableName}
+        #foreach($column in $tableFieldList)
+        #if($column.primaryKey)
+        where ${column.columnName}=#{$column.variableAttrName}
+        #end
+        #end
+    </delete>
+    #end
+
+    #if (${mapperXmlSelectByIdEnable})
+    <delete id="selectById">
+        select <include refid="allColumnAlias"/> from ${tableName} en
+        #foreach($column in $tableFieldList)
+        #if($column.primaryKey)
+        where ${column.columnName}=#{$column.variableAttrName}
+        #end
+        #end
+    </delete>
+    #end
+
+
+</mapper>

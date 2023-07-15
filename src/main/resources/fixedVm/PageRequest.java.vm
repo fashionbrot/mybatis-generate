@@ -1,0 +1,45 @@
+package ${packageOut}${requestOut};
+
+
+#if (${swagger2Enable})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${swagger3Enable})
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+#if($lombokEnable)
+import lombok.Data;
+#end
+import java.io.Serializable;
+#if($lombokEnable)
+@Data
+#end
+#if (${swagger2Enable})
+@ApiModel(value = "分页req")
+#end
+#if(${swagger3Enable})
+@Schema(title = "分页${requestSuffixLowerCase}")
+#end
+public class Page${requestSuffix} #if($serialVersionUIDEnable)implements Serializable#end{
+
+    #if($serialVersionUIDEnable)
+    private static final long serialVersionUID = -3988377311225811696L;
+    #end
+
+    #if (${swagger2Enable})
+    @ApiModelProperty(value = "当前页码")
+    #end
+    #if(${swagger3Enable})
+    @Schema(title = "当前页码")
+    #end
+    private Integer pageNum=1;
+
+    #if (${swagger2Enable})
+    @ApiModelProperty(value = "每页条数")
+    #end
+    #if(${swaggerStatus3})
+    @Schema(title = "每页条数")
+    #end
+    private Integer pageSize=10;
+}

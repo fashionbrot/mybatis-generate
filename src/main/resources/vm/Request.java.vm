@@ -1,0 +1,37 @@
+package ${packageOut}${requestOut};
+
+import ${packageOut}${requestOut}.Page${requestSuffix};
+#if($lombokEnable)
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+#end
+#if (${swagger2Enable})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${swagger3Enable})
+import io.swagger.v3.oas.annotations.media.Schema;
+#end
+
+/**
+ * ${tableNameDescription}
+ *
+#if(${author})
+ * @author ${author}
+#end
+ */
+
+#if (${swagger2Enable})
+@ApiModel("${className}${requestSuffix}")
+#end
+#if(${swagger3Enable})
+@Schema(title = "${className}${requestSuffix}")
+#end
+#if($lombokEnable)
+@EqualsAndHashCode(callSuper=false)
+@Data
+#end
+public class ${className}${requestSuffix} extends Page${requestSuffix} {
+
+
+}

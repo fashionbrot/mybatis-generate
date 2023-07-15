@@ -1,0 +1,49 @@
+package ${packageOut}${mapperOut};
+
+
+import ${packageOut}${entityOut}.${className}${entitySuffix};
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+#if($mybatisPlusEnable)
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+import java.util.List;
+import java.util.Map;
+#if($mapperXmlDeleteByIdEnable || $mapperXmlSelectByIdEnable)
+import java.io.Serializable;
+#end
+
+/**
+ * ${tableNameDescription}
+ *
+#if(${author})
+ * @author ${author}
+#end
+ */
+@Mapper
+public interface ${className}${mapperSuffix} #if($mybatisPlusEnable)extends BaseMapper<${className}${entitySuffix}>#end {
+
+    #if($mapperXmlInsertEnable)
+    Long insert(${className}${entitySuffix} entity);
+    #end
+
+    #if($mapperXmlInsertsEnable)
+    Long insertList(List<${className}${entitySuffix}> list);
+    #end
+
+    #if($mapperXmlUpdateByIdEnable)
+    Long updateById(${className}${entitySuffix} entity);
+    #end
+
+    #if($mapperXmlDeleteByIdEnable)
+    Long deleteById(Serializable id);
+    #end
+
+    #if($mapperXmlSelectByIdEnable)
+    ${className}${entitySuffix} selectById(Serializable id);
+    #end
+
+}

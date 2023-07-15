@@ -1,0 +1,82 @@
+package ${packageOut}${serviceOut}.impl;
+
+
+
+
+import ${packageOut}${mapperOut}.${className}${mapperSuffix};
+
+import ${packageOut}${entityOut}.${className}${entitySuffix};
+import ${packageOut}${serviceOut}.${className}${serviceSuffix};
+#if (${pageListStatus})
+import ${packageOut}${requestOut}.${className}${requestSuffix};
+#end
+import ${packageOut}${responseOut}.Page${responseSuffix};
+import ${packageOut}${responseOut}.${responseClassName};
+
+#if (${pageHelperEnable})
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+#else
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+#if($lombokEnable)
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+#end
+#if($mybatisPlusEnable)
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+#end
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
+
+/**
+ * ${commentsEntity}
+ *
+#if(${author})
+ * @author ${author}
+#end
+ */
+@Service
+#if($lombokEnable)
+@Slf4j
+@RequiredArgsConstructor
+#end
+public class ${className}${serviceImplSuffix}  #if($mybatisPlusEnable)extends ServiceImpl<${className}${mapperSuffix},${className}${entitySuffix}>#end implements ${className}${serviceSuffix} {
+
+
+    #if($lombokEnable)
+    final ${className}${mapperSuffix} ${variableClassName}${mapperSuffix};
+    #else
+    @Resource
+    private ${className}${mapperSuffix} ${variableClassName}${mapperSuffix};
+    #end
+
+    #if (${customPageListInterfaceEnable})
+    @Override
+    public Object pageList(${className}${requestSuffix} ${requestSuffixLowerCase}) {
+        #if (${pageHelperEnable})
+        Page<?> page = PageHelper.startPage(${requestSuffixLowerCase}.getPageNum(),${requestSuffixLowerCase}.getPageSize());
+        List<${className}${entitySuffix}> listByMap = ${variableClassName}${mapperSuffix}.selectByMap(null);
+
+        return Page${responseSuffix}.<${className}${entitySuffix}>builder()
+                .rows(listByMap)
+                .total(page.getTotal())
+                .build();
+        #else
+        Page<${className}${entitySuffix}> page=new Page<>(${requestSuffixLowerCase}.getPageNum(),${requestSuffixLowerCase}.getPageSize());
+        ${variableClassName}${mapperSuffix}.selectPage(page,null);
+        return Page${responseSuffix}.<${className}${entitySuffix}>builder()
+                .rows(page.getRecords())
+                .total(page.getTotal())
+                .build();
+        #end
+    }
+    #end
+
+}

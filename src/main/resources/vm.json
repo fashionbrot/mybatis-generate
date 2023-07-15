@@ -5,5 +5,47 @@
     "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${entityOut}",
     "outFileName": "${className}${entitySuffix}",
     "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${mapperEnable}",
+    "templatePath": "vm/Mapper.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${mapperOut}",
+    "outFileName": "${className}${mapperSuffix}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${mapperXmlEnable}",
+    "templatePath": "vm/Mapper.xml.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${mapperXmlOut}",
+    "outFileName": "${className}${mapperXmlSuffix}",
+    "outFileSuffix": ".xml"
+  },
+  {
+    "enable": "${serviceEnable}",
+    "templatePath": "vm/Service.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${serviceOut}",
+    "outFileName": "${className}${serviceSuffix}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${serviceImplEnable}",
+    "templatePath": "vm/ServiceImpl.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${serviceImplOut}",
+    "outFileName": "${className}${serviceImplSuffix}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${controllerEnable}",
+    "templatePath": "vm/Controller.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${controllerOut}",
+    "outFileName": "${className}${controllerSuffix}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${requestEnable}",
+    "templatePath": "vm/Request.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${requestOut}",
+    "outFileName": "${className}${requestSuffix}",
+    "outFileSuffix": ".java"
   }
 ]

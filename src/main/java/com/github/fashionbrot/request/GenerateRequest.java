@@ -151,22 +151,22 @@ public class GenerateRequest {
     /**
      * 是否生成自定义 PageList 接口
      */
-    private Boolean generateCustomPageListInterfaceEnable;
+    private Boolean customPageListInterfaceEnable;
 
     /**
      * 是否生成自定义 Insert 接口
      */
-    private Boolean generateCustomInsertInterfaceEnable;
+    private Boolean customInsertInterfaceEnable;
 
     /**
      * 是否生成自定义 Update 接口
      */
-    private Boolean generateCustomUpdateInterfaceEnable;
+    private Boolean customUpdateInterfaceEnable;
 
     /**
      * 是否生成自定义 Update 接口
      */
-    private Boolean generateCustomDeleteInterfaceEnable;
+    private Boolean customDeleteInterfaceEnable;
 
 
     /**
@@ -180,11 +180,15 @@ public class GenerateRequest {
     /**
      * 是否生成 mapper update
      */
-    private Boolean mapperXmlUpdateEnable;
+    private Boolean mapperXmlUpdateByIdEnable;
     /**
      * 是否生成 mapper delete
      */
-    private Boolean mapperXmlDeleteEnable;
+    private Boolean mapperXmlDeleteByIdEnable;
+    /**
+     * 是否生成 mapper delete
+     */
+    private Boolean mapperXmlSelectByIdEnable;
 
     /**
      *  mapper xml 中是否使用别名
