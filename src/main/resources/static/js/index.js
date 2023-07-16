@@ -284,6 +284,7 @@ function deleteDatabase(name) {
                 if (data.code == 0) {
                     loadDatabaseShowTable();
                     loadDatabase();
+                    deleteLocalStorageDatabaseId(name);
                 } else {
                     alert(data.msg);
                 }
@@ -535,4 +536,14 @@ function loadLocalStorage(key,inputId){
         }
     }
 
+}
+
+function deleteLocalStorageDatabaseId(databaseId) {
+    let deleteKeyPrefix = keyPrefix+md5(databaseId);
+    for(var i=0;i<localStorage.length;i++){
+        let key = localStorage.key(i);
+        if (key.startsWith(deleteKeyPrefix)){
+            localStorage.removeItem(key);
+        }
+    }
 }
