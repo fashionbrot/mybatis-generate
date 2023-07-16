@@ -26,6 +26,7 @@ import java.io.Serializable;
 @Mapper
 public interface ${className}${mapperSuffix} #if($mybatisPlusEnable)extends BaseMapper<${className}${entitySuffix}>#end {
 
+    #if(!$mybatisPlusEnable)
     #if($mapperXmlInsertEnable)
     Long insert(${className}${entitySuffix} entity);
     #end
@@ -45,5 +46,5 @@ public interface ${className}${mapperSuffix} #if($mybatisPlusEnable)extends Base
     #if($mapperXmlSelectByIdEnable)
     ${className}${entitySuffix} selectById(Serializable id);
     #end
-
+    #end
 }

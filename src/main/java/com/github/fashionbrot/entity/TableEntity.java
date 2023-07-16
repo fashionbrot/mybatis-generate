@@ -54,4 +54,9 @@ public class TableEntity {
      * 数据库引擎
      */
     private String engine;
+
+    /**
+     * 主键类型
+     */
+    private String primaryKeyType;
 }

@@ -47,5 +47,76 @@
     "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${requestOut}",
     "outFileName": "${className}${requestSuffix}",
     "outFileSuffix": ".java"
+  },
+  {
+    "enable": "${responseEnable}",
+    "templatePath": "vm/Response.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${responseOut}",
+    "outFileName": "${className}${responseSuffix}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${responseEnable}",
+    "templatePath": "vm/single/Response.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${responseOut}",
+    "outFileName": "${responseClassName}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${responseEnable}",
+    "templatePath": "vm/single/PageResponse.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${responseOut}",
+    "outFileName": "Page${responseClassName}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${responseEnable}",
+    "templatePath": "vm/single/PageRequest.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${requestOut}",
+    "outFileName": "Page${requestSuffix}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/Application.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}",
+    "outFileName": "Application",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/SwaggerConfig.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.config",
+    "outFileName": "SwaggerConfig",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/MyBatisPlusConfig.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.config",
+    "outFileName": "MyBatisPlusConfig",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/settings.gradle.vm",
+    "outFilePath": "${out}.",
+    "outFileName": "settings",
+    "outFileSuffix": ".gradle"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/build.gradle.vm",
+    "outFilePath": "${out}.",
+    "outFileName": "build",
+    "outFileSuffix": ".gradle"
   }
 ]

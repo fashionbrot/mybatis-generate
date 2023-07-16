@@ -84,29 +84,33 @@ public class MybatisGenerateController {
         request = GenerateRequest.builder()
                 .selectTableNames("banner")
                 .author("张三")
-                .out("E:\\dev\\idea\\projects\\Sample")
-                .packageOut("com.jinxing.electric")
+//                .out("E:\\dev\\idea\\projects\\Sample")
+                .out("E:\\dev\\idea\\IdeaProjects\\demo\\")
+                .packageOut("com.github.fashionbrot")
                 .sourceSetJava("\\src\\main\\java")
 
                 .serialVersionUIDEnable(true)
                 .swagger2Enable(true)
                 .swagger3Enable(false)
-                .mybatisPlusEnable(false)
+                .mybatisPlusEnable(true)
                 .lombokEnable(true)
+                .basicEnable(true)
+
+                .customPageListInterfaceEnable(true)
 
                 .dateFormatValue("yyyy-MM-dd HH:mm:ss")
                 .fieldInsertFillNames("create_date")
                 .fieldUpdateFillNames("update_date")
 
-                .entityEnable(false)
+                .entityEnable(true)
                 .entityOut(".entity")
                 .entitySuffix("Entity")
 
-                .mapperEnable(false)
+                .mapperEnable(true)
                 .mapperOut(".mapper")
                 .mapperSuffix("Mapper")
 
-                .mapperXmlEnable(false)
+                .mapperXmlEnable(true)
                 .mapperXmlOut(".mapper.xml")
                 .mapperXmlSuffix("Mapper")
 

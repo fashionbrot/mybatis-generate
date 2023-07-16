@@ -96,33 +96,19 @@
                 #end
             #end
         </set>
-        #foreach($column in $tableFieldList)
-            #if($column.primaryKey)
-        where ${column.columnName}=#{${column.variableAttrName}}
-            #end
-        #end
+        where en.id=#{id}
     </update>
     #end
 
     #if (${mapperXmlDeleteByIdEnable})
     <delete id="deleteById">
-        delete from ${tableName}
-        #foreach($column in $tableFieldList)
-        #if($column.primaryKey)
-        where ${column.columnName}=#{$column.variableAttrName}
-        #end
-        #end
+        delete from ${tableName} where en.id=#{id}
     </delete>
     #end
 
     #if (${mapperXmlSelectByIdEnable})
     <delete id="selectById">
-        select <include refid="allColumnAlias"/> from ${tableName} en
-        #foreach($column in $tableFieldList)
-        #if($column.primaryKey)
-        where ${column.columnName}=#{$column.variableAttrName}
-        #end
-        #end
+        select <include refid="allColumnAlias"/> from ${tableName} en where en.id=#{id}
     </delete>
     #end
 

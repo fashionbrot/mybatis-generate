@@ -1,0 +1,76 @@
+package ${packageOut}.config;
+
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+#if (${swagger2Enable})
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+#end
+
+#if (${swagger3Enable})
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.GroupedOpenApi;
+#end
+
+
+@Configuration
+#if (${swagger2Enable})
+@EnableSwagger2
+@EnableKnife4j
+#end
+public class SwaggerConfig {
+
+#if (${swagger2Enable})
+    @Bean
+    public Docket createRestApi() {
+        return  new Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(false)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("${packageOut}"))
+                .paths(PathSelectors.any())
+                .build();
+
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("swagger-bootstrap-ui RESTful APIs")
+                .description("swagger-bootstrap-ui")
+                .termsOfServiceUrl("http://localhost:8080/")
+                .version("1.0")
+                .build();
+    }
+#end
+
+#if (${swagger3Enable})
+    @Bean
+    public OpenAPI heroOpenAPI() {
+        return new OpenAPI()
+                .info(new Info().title("接口文档")
+                        .description("描述")
+                        .version("1.1.1"))
+                .externalDocs(new ExternalDocumentation().description(""));
+    }
+
+    @Bean
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("")
+                .pathsToMatch("/**")
+                .build();
+    }
+#end
+
+}

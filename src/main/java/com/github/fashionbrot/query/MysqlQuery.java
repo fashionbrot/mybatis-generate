@@ -56,7 +56,7 @@ public  class MysqlQuery extends AbstractQuery{
         if (!equals){
             return "id".equals(columnEntity.getColumnName()) && "PRI".equals(columnEntity.getColumnKey());
         }
-        return false;
+        return true;
     }
 
 

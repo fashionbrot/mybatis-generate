@@ -41,6 +41,6 @@ public class Page${responseSuffix}<T> {
     #if(${swagger3Enable})
     @Schema(description = "总数")
     #end
-    private long total;
+    private Long total;
 
 }

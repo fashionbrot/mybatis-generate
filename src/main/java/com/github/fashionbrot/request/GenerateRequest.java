@@ -86,7 +86,7 @@ public class GenerateRequest {
     /**
      * 是否生成 表之外的固定文件
      */
-    private String fixed;
+    private Boolean basicEnable;
 
     private String compileType;
 

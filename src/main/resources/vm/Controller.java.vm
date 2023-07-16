@@ -40,7 +40,7 @@ import lombok.*;
 
 
 #if (${swagger2Enable})
-@Api(tags="01、${tableNameDescription}")
+@Api(tags="${tableNameDescription}")
 #end
 #if (${swagger3Enable})
 @Tag(name="${tableNameDescription}")
@@ -84,8 +84,8 @@ public class ${className}${controllerSuffix}  {
     #end
     @GetMapping("/pageList")
     @ResponseBody
-    public ${responseClassName}<Page${responseSuffix}<List<${className}${entitySuffix}>>> pageList(${className}${requestSuffix} ${requestSuffixLowerCase}) {
-        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.pageList(${requestSuffixLowerCase}));
+    public ${responseClassName}<Page${responseSuffix}<List<${className}${entitySuffix}>>> pageList(${className}${requestSuffix} request) {
+        return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.pageList(request));
     }
     #end
 
@@ -115,7 +115,7 @@ public class ${className}${controllerSuffix}  {
     #end
     @GetMapping("/getById")
     @ResponseBody
-    public ${responseClassName}<${className}${entitySuffix}> getById(${pkAttrType} id){
+    public ${responseClassName}<${className}${entitySuffix}> getById(${primaryKeyType} id){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.getById(id));
     }
 
@@ -160,7 +160,7 @@ public class ${className}${controllerSuffix}  {
     #end
     @PostMapping("/deleteById")
     @ResponseBody
-    public ${responseClassName} deleteById(${pkAttrType} id){
+    public ${responseClassName} deleteById(${primaryKeyType} id){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.removeById(id));
     }
 
@@ -175,7 +175,7 @@ public class ${className}${controllerSuffix}  {
     #end
     @PostMapping("/deleteByIds")
     @ResponseBody
-    public ${responseClassName} deleteByIds(${pkAttrType}[] ids){
+    public ${responseClassName} deleteByIds(${primaryKeyType}[] ids){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.removeByIds(Arrays.asList(ids)));
     }
 

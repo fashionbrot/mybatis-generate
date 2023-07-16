@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -77,7 +78,7 @@ public class MybatisGenerateService {
         List<GenerateOut> generateOutList= new ArrayList<>();
         VelocityContext context = initTableColumn(velocityContext, tableName);
         Map<String, Object> contextMap = transform(context);
-        List<GenerateTemplate> templateList = templateService.getTemplate();
+        List<GenerateTemplate> templateList = templateService.getTemplate().stream().filter(m-> ObjectUtil.isBoolean(m.getSingle())).collect(Collectors.toList());
         if (ObjectUtil.isNotEmpty(templateList)){
             for (int i = 0; i < templateList.size(); i++) {
                 GenerateTemplate t = templateList.get(i);
@@ -111,7 +112,7 @@ public class MybatisGenerateService {
     private List<GenerateOut> getFixedGenerateOutList(VelocityContext context){
         List<GenerateOut> generateOutList= new ArrayList<>();
         Map<String, Object> contextMap = transform(context);
-        List<GenerateTemplate> templateList = templateService.getFixedTemplate();
+        List<GenerateTemplate> templateList = templateService.getTemplate().stream().filter(m-> !ObjectUtil.isBoolean(m.getSingle())).collect(Collectors.toList());
         if (ObjectUtil.isNotEmpty(templateList)){
             for (int i = 0; i < templateList.size(); i++) {
                 GenerateTemplate t = templateList.get(i);
@@ -185,16 +186,18 @@ public class MybatisGenerateService {
 
         List<ColumnEntity> columns = baseMapper.queryColumns(tableName);
         //解析主键、数据库关键字、属性转换
-        setDataType(context, columns);
-
+        setDataType(context,tableEntity, columns);
         tableEntity.setColumns(columns);
-
+        //Table 主键类型
+        context.put("primaryKeyType",tableEntity.getPrimaryKeyType());
+        //Table entity 是否需要序列化
         Boolean serialVersionUIDEnable = (Boolean) context.get("serialVersionUIDEnable");
         if (ObjectUtil.isBoolean(serialVersionUIDEnable)){
             context.put("serialVersionUID",IdWorker.getId());
         }
         setMapperColumn(context, tableEntity);
         context.put("tableFieldList",tableEntity.getColumns());
+        context.put("requestMappingPath",tableEntity.getVariableClassName());
 
         return context;
     }
@@ -216,7 +219,7 @@ public class MybatisGenerateService {
     }
 
 
-    private void setDataType(VelocityContext context, List<ColumnEntity> columns) {
+    private void setDataType(VelocityContext context,TableEntity tableEntity, List<ColumnEntity> columns) {
         String  deleteFieldName = ObjectUtil.formatString(context.get("deleteFieldName"));
         String  versionFieldName = ObjectUtil.formatString(context.get("versionFieldName"));
 
@@ -250,8 +253,11 @@ public class MybatisGenerateService {
             if (attrType.equalsIgnoreCase("BigDecimal" )) {
                 context.internalPut("hasBigDecimal",true);
             }
+            if (baseMapper.isKeyIdentity(columnEntity)){
+                columnEntity.setPrimaryKey(true);
+                tableEntity.setPrimaryKeyType(attrType);
+            }
 
-            columnEntity.setPrimaryKey(baseMapper.isKeyIdentity(columnEntity));
 
         }
     }

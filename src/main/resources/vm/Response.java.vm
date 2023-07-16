@@ -1,6 +1,5 @@
-package ${packageOut}${requestOut};
+package ${packageOut}${responseOut};
 
-import ${packageOut}${requestOut}.Page${requestSuffix};
 #if($lombokEnable)
 import lombok.*;
 #end
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
+
 
 /**
  * ${tableNameDescription}
@@ -36,7 +36,7 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 #end
-public class ${className}${requestSuffix} extends Page${requestSuffix} {
+public class ${className}${responseSuffix}  {
 
 
 #foreach($field in $tableFieldList)
