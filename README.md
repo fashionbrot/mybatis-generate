@@ -30,6 +30,6 @@ http://localhost:9999/
 
 > [捐赠记录,感谢你们的支持！](https://gitee.com/fashionbrot/mybatis-generate/wikis/%E6%8D%90%E8%B5%A0%E8%AE%B0%E5%BD%95)
 <p >
-<img alt="Image text" height="450" width="350"  src="./doc/zfb.jpg" title="捐赠给 validation" />
-<img alt="Image text" height="450" width="350" src="./doc/wx.jpg" title="捐赠给 validation" />
+<img alt="Image text" height="450" width="350"  src="./doc/zfb.jpg"  />
+<img alt="Image text" height="450" width="350" src="./doc/wx.jpg"  />
 </p>
