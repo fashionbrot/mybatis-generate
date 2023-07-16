@@ -262,21 +262,21 @@
                             </td>
                         </tr>
                         <tr>
-                            <input type="hidden" name="permissionEnable" id="permissionEnable" value="true"/>
+                            <input type="hidden" name="permissionEnable" id="permissionEnable" disabled="disabled" value="true"/>
                             <td class="text-right">
                                 <label>permission&nbsp;class</label>
                             </td>
                             <td>
-                                <input class="form-control tableInputSelect" id="permissionOut" name="permissionOut" type="text"  placeholder="permissionOut 输出地址" data-toggle="tooltip" data-placement="top" title="permissionOut 输出地址" value=".annotation"/>
+                                <input class="form-control tableInputSelect" disabled="disabled" id="permissionOut" name="permissionOut" type="text"  placeholder="permissionOut 输出地址" data-toggle="tooltip" data-placement="top" title="permissionOut 输出地址" value=".annotation"/>
                             </td>
                             <td>
                                 <label>name</label>
                             </td>
                             <td >
-                                <input class="form-control tableInputSelect" id="permissionClassName" name="permissionClassName" type="text"  placeholder="permissionClassName" data-toggle="tooltip" data-placement="top" title="permissionClassName" value="MarsPermission" />
+                                <input class="form-control tableInputSelect" disabled="disabled" id="permissionClassName" name="permissionClassName" type="text"  placeholder="permissionClassName" data-toggle="tooltip" data-placement="top" title="permissionClassName" value="MarsPermission" />
                             </td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                                <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)"><span style='color:#07c160;'>启用</span></button>
                             </td>
                         </tr>
                         <tr>
@@ -292,17 +292,18 @@
                                 <label>swagger</label>
                             </td>
                             <td colspan="4">
-                                swagger2:<input type="checkbox" checked="true" value="true"   id="swagger2Enable" name="swagger2Enable" title="使用swagger自动生产接口文档" data-toggle="tooltip" data-placement="top"  />&nbsp;
-                                swagger3:<input type="checkbox"   id="swagger3Enable"  name="swagger3Enable" title="使用swagger自动生产接口文档"  data-toggle="tooltip" data-placement="top" />&nbsp;
+                                swagger2:<input type="checkbox" checked="true" value="true"   id="swagger2Enable" name="swagger2Enable" title="使用swagger2自动生产接口文档" data-toggle="tooltip" data-placement="top"  />&nbsp;
+                                swagger3:<input type="checkbox"   id="swagger3Enable"  name="swagger3Enable" title="使用swagger3自动生产接口文档"  data-toggle="tooltip" data-placement="top" />&nbsp;
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right">
-                                <label>page&nbsp;mode</label>
+                                <label>Tool frame</label>
                             </td>
                             <td colspan="4">
+                                lombok<input type="checkbox" checked="true" value="true" disabled="disabled" id="lombokEnable" name="lombokEnable" title="使用lombok" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;
+                                mybatis-plus:<input type="checkbox" checked="true" value="true" disabled="disabled" id="mybatisPlusEnable" name="mybatisPlusEnable"  title="使用mybatis-plus" data-toggle="tooltip" data-placement="top"  />&nbsp;
                                 pageHelper:<input type="checkbox" checked="true" value="true" id="pageHelperEnable" name="pageHelperEnable" title="使用springboot 对应的pageHelper 分页工具" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;
-<!--                                mybatis-plus:<input type="checkbox"  id="mybatisPlusPageStatus" name="mybatisPlusPageStatus" title="使用springboot 对应的pageHelper 分页工具" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;-->
                             </td>
                         </tr>
                         <tr>
@@ -311,20 +312,29 @@
                             </td>
                             <td colspan="4">
 
-                                mapperXml-alias: <input type="checkbox" checked="true" value="true"  id="mapperXmlAliasEnable" name="mapperXmlAliasEnable" data-toggle="tooltip" data-placement="top" title="true代表mapper xml ResultMap type字段使用mybatis Alias别名，false 代表mapper xml ResultMap type字段全路径 " />&nbsp;&nbsp;
-                                mapperXml-inserts:<input type="checkbox"   id="insertsStatus" name="insertsStatus" title="生成MapperXml insert 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+                                resultMap type alias: <input type="checkbox" checked="true" value="true"  id="mapperXmlAliasEnable" name="mapperXmlAliasEnable" data-toggle="tooltip" data-placement="top" title="true代表mapper xml ResultMap type字段使用mybatis Alias别名，false 代表mapper xml ResultMap type字段全路径 " />&nbsp;&nbsp;
+                                inserts:<input type="checkbox"   id="mapperXmlInsertsEnable" name="mapperXmlInsertsEnable" title="生成MapperXml inserts 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+                                insert:<input type="checkbox"   id="mapperXmlInsertEnable" name="mapperXmlInsertEnable" title="生成MapperXml insert 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+                                updateById:<input type="checkbox"   id="mapperXmlUpdateByIdEnable" name="mapperXmlUpdateByIdEnable" title="生成MapperXml updateById 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+                                deleteById:<input type="checkbox"   id="mapperXmlDeleteByIdEnable" name="mapperXmlDeleteByIdEnable" title="生成MapperXml deleteById 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+                                selectById:<input type="checkbox"   id="mapperXmlSelectByIdEnable" name="mapperXmlSelectByIdEnable" title="生成MapperXml selectById 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+
                             </td>
                         </tr>
                         <tr>
                             <td class="text-right">
-                                <label>interface</label>
+                                <label>custom interface</label>
                             </td>
                             <td colspan="4">
-                                custom-pageList:<input type="checkbox"  id="customPageListInterfaceEnable" name="customPageListInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义pageList接口" />
+                                pageList:<input type="checkbox" checked="checked" value="true"  id="customPageListInterfaceEnable" name="customPageListInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义pageList接口" />
+                                list:<input type="checkbox" checked="checked" value="true" id="customListInterfaceEnable" name="customListInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义list接口" />
+                                insert:<input type="checkbox" checked="checked" value="true" id="customInsertInterfaceEnable" name="customInsertInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义insert接口" />
+                                updateById:<input type="checkbox" checked="checked" value="true" id="customUpdateByIdInterfaceEnable" name="customUpdateByIdInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义updateById接口" />
+                                deleteById:<input type="checkbox" checked="checked" value="true" id="customDeleteByIdInterfaceEnable" name="customDeleteByIdInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义deleteById接口" />
+                                deleteByIds:<input type="checkbox" checked="checked" value="true" id="customDeleteByIdsInterfaceEnable" name="customDeleteByIdsInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义deleteByIds接口" />
+                                selectById:<input type="checkbox" checked="checked" value="true" id="customSelectByIdInterfaceEnable" name="customSelectByIdInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义selectById接口" />
                             </td>
                         </tr>
-                        <input type="hidden" id="mybatisPlusEnable" name="mybatisPlusEnable" value="true" />
-                        <input type="hidden" id="lombokEnable" name="lombokEnable" value="true"/>
                         <input type="hidden" id="serialVersionUIDEnable" name="serialVersionUIDEnable" value="true"/>
                 </tbody>
             </table>
@@ -341,19 +351,20 @@
             <div style="width: 100%;float:right;">
                 <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
                     <label >剔前缀：</label><input type="text" style="width: 100px;" placeholder="剔除前缀" id="excludePrefix" name="excludePrefix" />
-                    <label >作者：</label><input id="author" name="author" type="text" style="width: 150px;"  placeholder="请输入注释的作者名称" value="fashionbrot"  />
-<!--                    <label >邮箱：</label><input id="email" name="email"   type="text"  placeholder="请输入注释的邮箱" value="fashionbrot@163.com" />-->
+                    <label >作者：</label><input id="author" name="author" type="text" style="width: 150px;"  placeholder="请输入注释的作者名称" value=""  />
                 </div>
                 <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
                     <label >配置项：</label>
-                    基础类:<input type="checkbox" checked="checked" title="vo类,config配置类,异常类,枚举类"   id="fixed" name="fixed"  />&nbsp;&nbsp;
+                    基础类:<input type="checkbox"  title="config配置类,application.yml"   id="basicEnable" name="basicEnable"  />&nbsp;&nbsp;
                 </div>
                 <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
                     <label >数据库：</label><select id="databaseId" style="width: 250px;height: 26px"></select>
                     <button class="btn btn-sm btn-primary " id="databaseConfig" type="button" >
                         数据库连接管理
                     </button>
-
+                    <button type="button" class="btn btn-sm btn-success"  onclick="saveRequestSetCookie()" data-toggle="tooltip" data-placement="top" title="缓存左侧配置，索引为当前数据库">
+                        缓存
+                    </button>
                 </div>
 
                 <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
@@ -367,7 +378,7 @@
 
                     <button type="button" class="btn btn-sm btn-primary" id="generate" onclick="generateCode()" data-complete-text="生成代码">生成代码</button>
 
-                    <button type="button" class="btn btn-sm btn-success" onclick="saveRequestSetCookie()">缓存</button>
+
 
 
                 </div>

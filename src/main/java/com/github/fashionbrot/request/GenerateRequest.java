@@ -169,19 +169,32 @@ public class GenerateRequest {
     private Boolean customPageListInterfaceEnable;
 
     /**
+     * 是否生成自定义 list 接口
+     */
+    private Boolean customListInterfaceEnable;
+    /**
      * 是否生成自定义 Insert 接口
      */
     private Boolean customInsertInterfaceEnable;
 
     /**
-     * 是否生成自定义 Update 接口
+     * 是否生成自定义 UpdateById 接口
      */
-    private Boolean customUpdateInterfaceEnable;
+    private Boolean customUpdateByIdInterfaceEnable;
 
     /**
-     * 是否生成自定义 Update 接口
+     * 是否生成自定义 deleteById 接口
      */
-    private Boolean customDeleteInterfaceEnable;
+    private Boolean customDeleteByIdInterfaceEnable;
+    /**
+     * 是否生成自定义 deleteByIds 接口
+     */
+    private Boolean customDeleteByIdsInterfaceEnable;
+
+    /**
+     * 是否生成自定义 selectById 接口
+     */
+    private Boolean customSelectByIdInterfaceEnable;
 
 
     /**

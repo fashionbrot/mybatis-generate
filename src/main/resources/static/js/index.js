@@ -1,4 +1,4 @@
-var keyPrefix = "quick-out-";
+let keyPrefix = "mg";
 $(function () {
     loadDatabase();
     loadData();
@@ -9,9 +9,9 @@ $(function () {
 
     $("#all").click(function () {
         if (this.checked) {
-            $("input[name='checboxName']").prop("checked", true);
+            $("input[name='checkboxName']").prop("checked", true);
         } else {
-            $("input[name='checboxName']").prop("checked", false);
+            $("input[name='checkboxName']").prop("checked", false);
         }
     });
 
@@ -28,11 +28,26 @@ $(function () {
         loadRequestSetCookie();
     });
 
+
+
     checkBoxClick(new Array("#swagger2Enable",
         "#swagger3Enable",
         "#pageHelperEnable",
         "#mapperXmlAliasEnable",
-        "#customPageListInterfaceEnable"),function (obj){
+        "#mapperXmlInsertsEnable",
+        "#mapperXmlInsertEnable",
+        "#mapperXmlUpdateByIdEnable",
+        "#mapperXmlDeleteByIdEnable",
+        "#mapperXmlSelectByIdEnable",
+        "#customPageListInterfaceEnable",
+        "#customSelectByIdInterfaceEnable",
+        "#customDeleteByIdsInterfaceEnable",
+        "#customDeleteByIdInterfaceEnable",
+        "#customUpdateByIdInterfaceEnable",
+        "#customInsertInterfaceEnable",
+        "#customListInterfaceEnable",
+        "#customPageListInterfaceEnable"
+    ),function (obj){
         inputCheckbox(obj)
     });
 
@@ -88,7 +103,7 @@ function loadData() {
                         var li = rows[i];
                         h += "<tr>";
                         h += "<td>";
-                        h += "<input type='checkbox' name='checboxName' value='" + li.tableName + "'>"
+                        h += "<input type='checkbox' name='checkboxName' value='" + li.tableName + "'>"
                         h += "</td>";
                         h += "<td>";
                         h += i + 1;
@@ -115,7 +130,7 @@ function loadData() {
 
 function generateCode() {
 
-    var obj = document.getElementsByName("checboxName");
+    var obj = document.getElementsByName("checkboxName");
     var check_val = [];
     for (k in obj) {
         if (obj[k].checked) {
@@ -127,7 +142,7 @@ function generateCode() {
         return false;
     }
 
-    var data = $("#formDiv").serialize() + "&generateTableNames=" + check_val.join(",") + "&" + $("#left").serialize()+"&databaseName="+$("#databaseId").val();
+    var data = $("#formDiv").serialize() + "&selectTableNames=" + check_val.join(",") + "&" + $("#left").serialize()+"&databaseName="+$("#databaseId").val();
     var outType = $("#outType").val();
     if (outType=="zip"){
         var url = ctx + "generateZip";
@@ -177,38 +192,6 @@ jQuery.download = function(url, data, method){ // 获得url和data
     };
 };
 
-
-$("#cacheButton").on("click", function () {
-    setItem("out");
-    setItem("packageOut");
-    setItem("controllerOut");
-    setItem("serviceOut");
-    setItem("requestOut");
-    setItem("entityOut");
-    setItem("mapperOut");
-    setItem("mapperXmlOut");
-    setItem("author");
-    setItem("email");
-});
-
-function setItem(id) {
-    var value = $("#" + id).val();
-    if (!isEmpty(value)) {
-        localStorage.setItem(keyPrefix + id, value);
-    }
-}
-
-// function jinyong(obj) {
-//     var dis = $(obj).parent().parent().find(".p-center input")[0];
-//     console.log($(dis))
-//     if (!$(dis).attr("disabled")) {
-//         $(dis).attr("disabled", "disabled")
-//         $(obj).html("<span style='color:#07c160;'>启用</span>")
-//     } else {
-//         $(dis).removeAttr("disabled")
-//         $(obj).html("禁用")
-//     }
-// }
 
 function jinyong(obj) {
     let inputs = $(obj).parent().parent().find("input");
@@ -432,9 +415,6 @@ function firstToUpperCase(name){
     }
     return "";
 }
-function encode(str){
-    return window.btoa(unescape(encodeURIComponent('我是一段需要处理的字符')))
-}
 
 function saveRequestSetCookie(){
     let databaseId =$("#databaseId").val();
@@ -480,6 +460,7 @@ function saveRequestSetCookie(){
         setLocalStorage(databaseId,"mapperXmlAliasEnable");
         setLocalStorage(databaseId,"customPageListInterfaceEnable")
     }
+    Toast("缓存成功");
 }
 function loadRequestSetCookie(){
     let databaseId =$("#databaseId").val();

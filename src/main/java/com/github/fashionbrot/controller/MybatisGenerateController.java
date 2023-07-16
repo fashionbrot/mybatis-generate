@@ -83,73 +83,73 @@ public class MybatisGenerateController {
     @RequestMapping("/generate")
     public Response generate(GenerateRequest request)  {
 
-        request = GenerateRequest.builder()
-                .selectTableNames("banner")
-                .compileType("gradle")
-                .author("张三")
-//                .out("E:\\dev\\idea\\projects\\Sample")
-                .out("E:\\dev\\idea\\IdeaProjects\\demo\\")
-                .packageOut("com.github.fashionbrot")
-                .sourceSetJava("\\src\\main\\java")
-                .sourceSetResources("\\src\\main\\resources")
-                .serialVersionUIDEnable(true)
-                .swagger2Enable(true)
-                .swagger3Enable(false)
-                .mybatisPlusEnable(true)
-                .lombokEnable(true)
-                .basicEnable(true)
-                .pageHelperEnable(true)
-
-                .customPageListInterfaceEnable(true)
-
-                .dateFormatValue("yyyy-MM-dd HH:mm:ss")
-                .fieldInsertFillNames("create_date")
-                .fieldUpdateFillNames("update_date")
-
-                .entityEnable(true)
-                .entityOut(".entity")
-                .entitySuffix("Entity")
-
-                .mapperEnable(true)
-                .mapperOut(".mapper")
-                .mapperSuffix("Mapper")
-
-                .mapperXmlEnable(true)
-                .mapperXmlOut(".mapper.xml")
-                .mapperXmlSuffix("Mapper")
-
-                .serviceEnable(true)
-                .serviceOut(".service")
-                .serviceSuffix("Service")
-
-                .serviceImplEnable(true)
-                .serviceImplOut(".service.impl")
-                .serviceImplSuffix("ServiceImpl")
-
-                .controllerEnable(true)
-                .controllerOut(".controller")
-                .controllerSuffix("Controller")
-
-                .permissionEnable(true)
-                .permissionClassName("Zdy")
-                .permissionOut(".annotation")
-
-                .requestEnable(true)
-                .requestOut(".request")
-                .requestSuffix("Request")
-
-                .responseClassName("Response")
-                .responseOut(".response")
-                .responseEnable(true)
-                .responseSuffix("Response")
-
-                .mapperXmlInsertsEnable(true)
-                .mapperXmlInsertEnable(true)
-                .mapperXmlDeleteByIdEnable(true)
-                .mapperXmlSelectByIdEnable(true)
-                .mapperXmlUpdateByIdEnable(true)
-
-                .build();
+//        request = GenerateRequest.builder()
+//                .selectTableNames("banner")
+//                .compileType("gradle")
+//                .author("张三")
+////                .out("E:\\dev\\idea\\projects\\Sample")
+//                .out("E:\\dev\\idea\\IdeaProjects\\demo\\")
+//                .packageOut("com.github.fashionbrot")
+//                .sourceSetJava("\\src\\main\\java")
+//                .sourceSetResources("\\src\\main\\resources")
+//                .serialVersionUIDEnable(true)
+//                .swagger2Enable(true)
+//                .swagger3Enable(false)
+//                .mybatisPlusEnable(true)
+//                .lombokEnable(true)
+//                .basicEnable(true)
+//                .pageHelperEnable(true)
+//
+//                .customPageListInterfaceEnable(true)
+//
+//                .dateFormatValue("yyyy-MM-dd HH:mm:ss")
+//                .fieldInsertFillNames("create_date")
+//                .fieldUpdateFillNames("update_date")
+//
+//                .entityEnable(true)
+//                .entityOut(".entity")
+//                .entitySuffix("Entity")
+//
+//                .mapperEnable(true)
+//                .mapperOut(".mapper")
+//                .mapperSuffix("Mapper")
+//
+//                .mapperXmlEnable(true)
+//                .mapperXmlOut(".mapper.xml")
+//                .mapperXmlSuffix("Mapper")
+//
+//                .serviceEnable(true)
+//                .serviceOut(".service")
+//                .serviceSuffix("Service")
+//
+//                .serviceImplEnable(true)
+//                .serviceImplOut(".service.impl")
+//                .serviceImplSuffix("ServiceImpl")
+//
+//                .controllerEnable(true)
+//                .controllerOut(".controller")
+//                .controllerSuffix("Controller")
+//
+//                .permissionEnable(true)
+//                .permissionClassName("Zdy")
+//                .permissionOut(".annotation")
+//
+//                .requestEnable(true)
+//                .requestOut(".request")
+//                .requestSuffix("Request")
+//
+//                .responseClassName("Response")
+//                .responseOut(".response")
+//                .responseEnable(true)
+//                .responseSuffix("Response")
+//
+//                .mapperXmlInsertsEnable(true)
+//                .mapperXmlInsertEnable(true)
+//                .mapperXmlDeleteByIdEnable(true)
+//                .mapperXmlSelectByIdEnable(true)
+//                .mapperXmlUpdateByIdEnable(true)
+//
+//                .build();
 
         mybatisGenerateService.generatorCode(request);
         return Response.success();

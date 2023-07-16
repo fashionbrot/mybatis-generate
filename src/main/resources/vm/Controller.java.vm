@@ -92,6 +92,7 @@ public class ${className}${controllerSuffix}  {
     }
     #end
 
+    #if (${customListInterfaceEnable})
     #if(${permissionEnable})
     @${permissionClassName}("${className}List")
     #end
@@ -106,9 +107,11 @@ public class ${className}${controllerSuffix}  {
     public ${responseClassName}<List<${className}${entitySuffix}>> list(@RequestParam Map<String, Object> params){
         return  ${responseClassName}.success( ${variableClassName}${serviceSuffix}.listByMap(params));
     }
+    #end
 
+    #if (${customSelectByIdInterfaceEnable})
     #if(${permissionEnable})
-    @${permissionClassName}("${className}GetById")
+    @${permissionClassName}("${className}SelectById")
     #end
     #if (${swagger3Enable})
     @Operation(summary="根据id查询",description = "根据id查询")
@@ -116,12 +119,14 @@ public class ${className}${controllerSuffix}  {
     #if (${swagger2Enable})
     @ApiOperation(value = "根据id查询", notes = "根据id查询")
     #end
-    @GetMapping("/getById")
+    @GetMapping("/selectById")
     @ResponseBody
-    public ${responseClassName}<${className}${entitySuffix}> getById(${primaryKeyType} id){
+    public ${responseClassName}<${className}${entitySuffix}> selectById(${primaryKeyType} id){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.getById(id));
     }
+    #end
 
+    #if($customInsertInterfaceEnable)
     #if(${permissionEnable})
     @${permissionClassName}("${className}Insert")
     #end
@@ -136,7 +141,9 @@ public class ${className}${controllerSuffix}  {
     public ${responseClassName} insert(@RequestBody ${className}${entitySuffix} entity){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.save(entity));
     }
+    #end
 
+    #if($customUpdateByIdInterfaceEnable)
     #if(${permissionEnable})
     @${permissionClassName}("${className}UpdateById")
     #end
@@ -151,7 +158,9 @@ public class ${className}${controllerSuffix}  {
     public ${responseClassName} updateById(@RequestBody ${className}${entitySuffix} entity){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.updateById(entity));
     }
+    #end
 
+    #if($customDeleteByIdInterfaceEnable)
     #if(${permissionEnable})
     @${permissionClassName}("${className}DeleteById")
     #end
@@ -166,7 +175,9 @@ public class ${className}${controllerSuffix}  {
     public ${responseClassName} deleteById(${primaryKeyType} id){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.removeById(id));
     }
+    #end
 
+    #if($customDeleteByIdsInterfaceEnable)
     #if(${permissionEnable})
     @${permissionClassName}("${className}DeleteByIds")
     #end
@@ -181,7 +192,7 @@ public class ${className}${controllerSuffix}  {
     public ${responseClassName} deleteByIds(${primaryKeyType}[] ids){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.removeByIds(Arrays.asList(ids)));
     }
-
+    #end
 
 
 }
