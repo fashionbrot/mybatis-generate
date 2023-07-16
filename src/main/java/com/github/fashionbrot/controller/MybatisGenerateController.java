@@ -5,6 +5,7 @@ import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
 import com.github.fashionbrot.request.GenerateRequest;
 import com.github.fashionbrot.response.Response;
+import com.github.fashionbrot.service.DatasourceTypeServer;
 import com.github.fashionbrot.service.DruidService;
 import com.github.fashionbrot.service.MybatisGenerateService;
 import com.github.fashionbrot.util.IoUtil;
@@ -26,6 +27,7 @@ public class MybatisGenerateController {
 
     final MybatisGenerateService mybatisGenerateService;
     final DruidService druidService;
+    final DatasourceTypeServer datasourceTypeServer;
     final HttpServletResponse response;
 
     @GetMapping("/")
@@ -40,7 +42,7 @@ public class MybatisGenerateController {
     @ResponseBody
     @RequestMapping("/list")
     public Response<List<TableEntity>> list(GenerateRequest request){
-        return Response.success(druidService.queryList(request));
+        return Response.success(datasourceTypeServer.tableList(request));
     }
 
 
@@ -83,18 +85,20 @@ public class MybatisGenerateController {
 
         request = GenerateRequest.builder()
                 .selectTableNames("banner")
+                .compileType("gradle")
                 .author("张三")
 //                .out("E:\\dev\\idea\\projects\\Sample")
                 .out("E:\\dev\\idea\\IdeaProjects\\demo\\")
                 .packageOut("com.github.fashionbrot")
                 .sourceSetJava("\\src\\main\\java")
-
+                .sourceSetResources("\\src\\main\\resources")
                 .serialVersionUIDEnable(true)
                 .swagger2Enable(true)
                 .swagger3Enable(false)
                 .mybatisPlusEnable(true)
                 .lombokEnable(true)
                 .basicEnable(true)
+                .pageHelperEnable(true)
 
                 .customPageListInterfaceEnable(true)
 
@@ -125,6 +129,10 @@ public class MybatisGenerateController {
                 .controllerEnable(true)
                 .controllerOut(".controller")
                 .controllerSuffix("Controller")
+
+                .permissionEnable(true)
+                .permissionClassName("Zdy")
+                .permissionOut(".annotation")
 
                 .requestEnable(true)
                 .requestOut(".request")

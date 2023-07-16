@@ -1,0 +1,61 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="add-database">
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false"
+         data-backdrop="static">
+        <div class="modal-dialog" style="width: 950px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        新增
+                    </h4>
+                </div>
+                <div class="modal-body" style="height: 280px;">
+                    <form id="addForm" role="form">
+                        <div class="form-group addDb">
+                            <label class="col-sm-2 control-label">连接名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="连接名称">
+                            </div>
+                        </div>
+                        <div class="form-group addDb">
+                            <label class="col-sm-2 control-label">driverClassName</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="driverClassName" name="driverClassName"
+                                       placeholder="driverClassName">
+                            </div>
+                        </div>
+                        <div class="form-group addDb">
+                            <label class="col-sm-2 control-label">url</label>
+                            <div class="col-sm-10">
+                                <textarea type="text" class="form-control" id="url" name="url" placeholder="url"></textarea>
+                            </div>
+                        </div>
+                        <p style="height: 10px"></p>
+                        <div class="form-group addDb">
+                            <label class="col-sm-2 control-label">username</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="username" name="username"
+                                       placeholder="username">
+                            </div>
+                        </div>
+                        <div class="form-group addDb">
+                            <label class="col-sm-2 control-label">password</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="password" name="password"
+                                       placeholder="password">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> 关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="addDatabase()">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>

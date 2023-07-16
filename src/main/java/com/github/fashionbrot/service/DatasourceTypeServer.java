@@ -2,6 +2,7 @@ package com.github.fashionbrot.service;
 
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
+import com.github.fashionbrot.request.GenerateRequest;
 
 import java.util.List;
 
@@ -12,10 +13,9 @@ public interface DatasourceTypeServer {
 
     /**
      * 获取数据库表
-     * @param tableName 查询条件
      * @return
      */
-    List<TableEntity> tableList(String tableName);
+    List<TableEntity> tableList(GenerateRequest request);
     /**
      * 获取表对象
      * @param tableName 查询条件

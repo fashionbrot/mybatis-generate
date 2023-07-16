@@ -1,0 +1,62 @@
+package ${packageOut}.config;
+
+
+
+import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.exception.ValidatedException;
+
+import ${packageOut}${responseOut}.${responseClassName};
+
+import com.github.fashionbrot.util.ObjectUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Object exception(ConstraintViolationException e) {
+        if (ObjectUtil.isNotEmpty(e.getConstraintViolations())) {
+            Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+
+            return constraintViolations.stream().map(m -> m.getMessage()).collect(Collectors.joining(","));
+        }
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(ValidatedException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Object ValidatedException(ValidatedException e) {
+        List<MarsViolation> violations = e.getViolations();
+        if (ObjectUtil.isEmpty(violations)){
+            return e.getMsg();
+        }else {
+            return violations.stream().map(m -> m.getMsg()).collect(Collectors.joining(","));
+        }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public Object globalException(HttpServletRequest request, HandlerMethod handlerMethod, Exception ex) {
+        log.error("exception error:{}",ex);
+        return ${responseClassName}.fail("请求失败",0);
+    }
+
+
+
+
+}

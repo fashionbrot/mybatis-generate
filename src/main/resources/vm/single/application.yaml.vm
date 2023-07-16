@@ -1,0 +1,37 @@
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+spring:
+  thymeleaf:
+    cache: false
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    servlet:
+      content-type: text/html
+    suffix: .html
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 50MB
+      max-file-size: 50MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+#if (${mybatisPlusEnable})
+mybatis-plus:
+  mapper-locations: classpath*:com/gitee/fashionbrot/mapper/xml/*.xml
+  type-aliases-package: com.gitee.fashionbrot.entity
+#end
+#if (${pageHelperEnable})
+pagehelper:
+  helper-dialect: mysql
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: false
+#end

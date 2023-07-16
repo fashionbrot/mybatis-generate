@@ -78,18 +78,16 @@ public class MybatisGenerateService {
         List<GenerateOut> generateOutList= new ArrayList<>();
         VelocityContext context = initTableColumn(velocityContext, tableName);
         Map<String, Object> contextMap = transform(context);
-        List<GenerateTemplate> templateList = templateService.getTemplate().stream().filter(m-> ObjectUtil.isBoolean(m.getSingle())).collect(Collectors.toList());
+        List<GenerateTemplate> templateList = templateService.getTemplate().stream().filter(m-> !ObjectUtil.isBoolean(m.getSingle())).collect(Collectors.toList());
         if (ObjectUtil.isNotEmpty(templateList)){
             for (int i = 0; i < templateList.size(); i++) {
                 GenerateTemplate t = templateList.get(i);
                 GenerateTemplate template = new GenerateTemplate();
                 BeanUtils.copyProperties(t,template);
 
-                boolean enable = ObjectUtil.parseBoolean(GenericTokenUtil.parse(template.getEnable(), contextMap));
-                if (!enable){
+                if (!ObjectUtil.parseBoolean(GenericTokenUtil.parse(template.getEnable(), contextMap))){
                     continue;
                 }
-                log.info("contentMap",JsonUtil.toString(contextMap));
 
                 template.setTemplatePath( GenericTokenUtil.parse(template.getTemplatePath(), contextMap));
                 template.setOutFilePath( replaceAll(GenericTokenUtil.parse(template.getOutFilePath(), contextMap)));
@@ -109,21 +107,35 @@ public class MybatisGenerateService {
         return generateOutList;
     }
 
+
+
     private List<GenerateOut> getFixedGenerateOutList(VelocityContext context){
         List<GenerateOut> generateOutList= new ArrayList<>();
         Map<String, Object> contextMap = transform(context);
-        List<GenerateTemplate> templateList = templateService.getTemplate().stream().filter(m-> !ObjectUtil.isBoolean(m.getSingle())).collect(Collectors.toList());
+        String compileType = (String)contextMap.get("compileType");
+        List<GenerateTemplate> templateList = templateService.getTemplate().stream().filter(m-> ObjectUtil.isBoolean(m.getSingle())).collect(Collectors.toList());
         if (ObjectUtil.isNotEmpty(templateList)){
             for (int i = 0; i < templateList.size(); i++) {
                 GenerateTemplate t = templateList.get(i);
                 GenerateTemplate template = new GenerateTemplate();
                 BeanUtils.copyProperties(t,template);
 
-                boolean enable = ObjectUtil.parseBoolean(GenericTokenUtil.parse(template.getEnable(), contextMap));
-                if (!enable){
+                if (!ObjectUtil.parseBoolean(GenericTokenUtil.parse(template.getEnable(), contextMap))){
                     continue;
                 }
-
+                if ("gradle".equals(compileType)){
+                    if ("pom".equals(template.getOutFileName()) && ".xml".equals(template.getOutFileSuffix()) ){
+                        continue;
+                    }
+                }
+                if ("maven".equals(compileType)){
+                    if ("build".equals(template.getOutFileName()) && ".gradle".equals(template.getOutFileSuffix())) {
+                        continue;
+                    }
+                    if ("settings".equals(template.getOutFileName()) && ".gradle".equals(template.getOutFileSuffix())){
+                        continue;
+                    }
+                }
 
                 template.setTemplatePath( GenericTokenUtil.parse(template.getTemplatePath(), contextMap));
                 template.setOutFilePath( replaceAll(GenericTokenUtil.parse(template.getOutFilePath(), contextMap)));
@@ -142,11 +154,10 @@ public class MybatisGenerateService {
         return generateOutList;
     }
 
+
     public String getFileFullPath(GenerateTemplate template){
         return template.getOutFilePath()+ File.separator+ template.getOutFileName()+template.getOutFileSuffix();
-
     }
-
 
     private StringWriter getTemplateValue(String templatePath, VelocityContext velocityContext) {
         StringWriter sw = new StringWriter();
@@ -154,7 +165,6 @@ public class MybatisGenerateService {
         tpl.merge(velocityContext, sw);
         return sw;
     }
-
 
     public Map<String,Object> transform(VelocityContext context){
         String[] keys = context.getKeys();

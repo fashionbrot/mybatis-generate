@@ -76,6 +76,7 @@ dependencies {
     #if (${pageHelperEnable})
     implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.4.1'
     #end
+    implementation 'com.github.fashionbrot:spring-boot-starter-validation:2.1.4'
 }
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"

@@ -1,0 +1,90 @@
+package ${packageOut}.config;
+
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+
+@Component
+public class FieldMetaObjectHandler implements MetaObjectHandler, BeanFactoryAware {
+
+    private final static String CREATE_ID = "createId";
+    private final static String CREATE_DATE = "createDate";
+    private final static String UPDATE_ID = "updateId";
+    private final static String UPDATE_DATE = "updateDate";
+    private final static String DEL_FLAG = "delFlag";
+
+
+    /**
+     * insert 表时添加必填字段
+     * @param metaObject
+     */
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        insertUserId(metaObject, CREATE_ID);
+        insertDate(metaObject, CREATE_DATE);
+        insertFlag(metaObject, DEL_FLAG);
+    }
+
+    /**
+     * update 表时更新必填字段
+     * @param metaObject
+     */
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        updateUserId(metaObject, UPDATE_ID);
+        updateDate(metaObject, UPDATE_DATE);
+    }
+
+
+    private void insertUserId(MetaObject metaObject, String filedName) {
+        this.strictInsertFill(metaObject, filedName, Long.class, getUserId());
+        this.strictInsertFill(metaObject, filedName, this::getUserId, Long.class);
+    }
+
+    private void insertDate(MetaObject metaObject, String filedName) {
+        this.strictInsertFill(metaObject, filedName, Date.class, new Date());
+        this.strictInsertFill(metaObject, filedName, Date::new, Date.class);
+    }
+
+    private void insertFlag(MetaObject metaObject, String filedName) {
+        this.strictInsertFill(metaObject, filedName, Integer.class, 0);
+    }
+
+
+    private void updateUserId(MetaObject metaObject, String filedName) {
+        Object fieldValByName = getFieldValByName(filedName, metaObject);
+        if (fieldValByName != null) {
+            this.setFieldValByName(filedName, getUserId(), metaObject);
+        }
+        this.strictUpdateFill(metaObject, filedName, Long.class, getUserId());
+        this.strictUpdateFill(metaObject, filedName, this::getUserId, Long.class);
+
+    }
+
+    private void updateDate(MetaObject metaObject, String filedName) {
+        Object fieldValByName = getFieldValByName(filedName, metaObject);
+        if (fieldValByName != null) {
+            this.setFieldValByName(filedName, new Date(), metaObject);
+        }
+        this.strictUpdateFill(metaObject, filedName, Date.class, new Date());
+        this.strictUpdateFill(metaObject, filedName, Date::new, Date.class);
+
+    }
+
+    private Long getUserId() {
+
+        return 0L;
+    }
+
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+
+    }
+
+}

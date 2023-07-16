@@ -25,7 +25,10 @@ public class GenerateRequest {
      * 输出类型 zip  local
      */
     private String outType;
-
+    /**
+     * 编译类型
+     */
+    private String compileType;
     /**
      * 输出总路径
      */
@@ -78,8 +81,17 @@ public class GenerateRequest {
 
     private String responseClassName;
 
+    /**
+     * 接口权限名称
+     */
     private Boolean permissionEnable;
+    /**
+     * 权限包路径
+     */
     private String permissionOut;
+    /**
+     * 权限ClassName
+     */
     private String permissionClassName;
 
 
@@ -88,7 +100,7 @@ public class GenerateRequest {
      */
     private Boolean basicEnable;
 
-    private String compileType;
+
 
     /**
      * 插入表 填充字段 多个逗号分割
@@ -101,14 +113,17 @@ public class GenerateRequest {
     /**
      * 如果是Date 类型增加
      */
+    @Builder.Default
     private String dateFormatValue="yyyy-MM-dd HH:mm:ss";
     /**
      * 逻辑删除默认值
      */
+    @Builder.Default
     private String tableLogicValue="0";
     /**
      * 逻辑删除”删除值“默认值
      */
+    @Builder.Default
     private String tableLogicDeleteValue="1";
     /**
      * 乐观锁标记字段

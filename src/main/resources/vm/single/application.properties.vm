@@ -1,0 +1,23 @@
+server.port= 8082
+
+
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.max-lifetime=1800000
+#if($databaseType=='mysql')
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/test?Unicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false&rewriteBatchedStatements=true&allowMultiQueries=true
+spring.datasource.username=root
+spring.datasource.password=123456
+#elseif($databaseType=='oracle')
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.datasource.url=jdbc:oracle:thin:@192.168.1.1:1521:orcl
+spring.datasource.username=username
+spring.datasource.password=password
+#elseif($databaseType=='sqlserver')
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.datasource.url=jdbc:sqlserver://192.168.10.10:1433;DatabaseName=test
+spring.datasource.username=sa
+spring.datasource.password=123456
+#end
+

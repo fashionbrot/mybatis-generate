@@ -81,6 +81,14 @@
   },
   {
     "single":true,
+    "enable": "${permissionEnable}",
+    "templatePath": "vm/single/MarsPermission.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${permissionOut}",
+    "outFileName": "${permissionClassName}",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
     "enable": "${basicEnable}",
     "templatePath": "vm/single/Application.java.vm",
     "outFilePath": "${out}.${sourceSetJava}.${packageOut}",
@@ -106,6 +114,30 @@
   {
     "single":true,
     "enable": "${basicEnable}",
+    "templatePath": "vm/single/FieldMetaObjectHandler.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.config",
+    "outFileName": "FieldMetaObjectHandler",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/GlobalExceptionHandler.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.config",
+    "outFileName": "GlobalExceptionHandler",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/CustomErrorController.java.vm",
+    "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${controllerOut}",
+    "outFileName": "CustomErrorController",
+    "outFileSuffix": ".java"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
     "templatePath": "vm/single/settings.gradle.vm",
     "outFilePath": "${out}.",
     "outFileName": "settings",
@@ -118,5 +150,29 @@
     "outFilePath": "${out}.",
     "outFileName": "build",
     "outFileSuffix": ".gradle"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/application.yaml.vm",
+    "outFilePath": "${out}.${sourceSetResources}.",
+    "outFileName": "application",
+    "outFileSuffix": ".yaml"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/application.properties.vm",
+    "outFilePath": "${out}.${sourceSetResources}.",
+    "outFileName": "application",
+    "outFileSuffix": ".properties"
+  },
+  {
+    "single":true,
+    "enable": "${basicEnable}",
+    "templatePath": "vm/single/pom.xml.vm",
+    "outFilePath": "${out}.",
+    "outFileName": "pom",
+    "outFileSuffix": ".xml"
   }
 ]

@@ -1,6 +1,5 @@
 package ${packageOut}${requestOut};
 
-import ${packageOut}${requestOut}.Page${requestSuffix};
 #if($lombokEnable)
 import lombok.*;
 #end

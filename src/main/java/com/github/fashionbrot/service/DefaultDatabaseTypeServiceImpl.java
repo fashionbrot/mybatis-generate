@@ -8,6 +8,7 @@ import com.github.fashionbrot.exception.MybatisGenerateException;
 import com.github.fashionbrot.mapper.BaseMapper;
 import com.github.fashionbrot.query.Query;
 import com.github.fashionbrot.query.QueryHelper;
+import com.github.fashionbrot.request.GenerateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,16 +25,17 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
 
     final DruidDataSource dataSource;
     final BaseMapper baseMapper;
+    final DruidService druidService;
 
 
     private Query query;
 
 
     @Override
-    public List<TableEntity> tableList(String tableName) {
-
+    public List<TableEntity> tableList(GenerateRequest request) {
+        druidService.reloadDatabase(request.getDatabaseName());
         initQuery();
-        return baseMapper.tableList(query.tablesListSql(tableName));
+        return baseMapper.tableList(query.tablesListSql(request.getTableName()));
     }
 
     @Override

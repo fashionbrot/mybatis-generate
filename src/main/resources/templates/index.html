@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>欢迎使用</title>
+    <!-- CSS only -->
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+</head>
+<style>
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0px auto;
+        padding:5px;
+
+        text-align: center;
+        background-color: rgba(0,0,0,.03);
+    }
+    .left{
+        float: left;
+        width: 45%;
+        height: 100%;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        padding: 5px;
+    }
+    .right{
+        float: right;
+        width: 54%;
+        margin-left: 5px;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        padding: 5px;
+    }
+
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+        vertical-align: middle !important;
+        padding: 5px !important;
+    }
+    .tableInputSelect{
+        height: 30px;
+        float: left;
+        width: 100%;
+    }
+
+</style>
+
+<body>
+
+    <!-- left 开始-->
+    <div class="left">
+        <form id="left">
+
+
+            <table class="table table-bordered small tableInput" >
+                <tbody style="height: 100%">
+                <!--<tr>
+                    <td class="text-right">
+                        <label>output type:</label>
+                    </td>
+                    <td colspan="4">
+                        <select class="form-control tableInputSelect" id="outType" name="outType" type="text" data-placement="top" style="width: 100%;">
+                            <option value="local">local本地</option>
+                            <option value="zip">zip包下载</option>
+                        </select>
+                    </td>
+                </tr>-->
+                <tr>
+                    <td class="text-right">
+                        <label>compile type:</label>
+                    </td>
+                    <td colspan="4">
+                        <select class="form-control tableInputSelect" id="compileType" name="compileType" type="text" data-placement="top" style="width: 100%;">
+                            <option value="gradle">gradle</option>
+                            <option value="maven">maven</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right">
+                        <label>output path:</label>
+                    </td>
+                    <td colspan="4">
+                        <input class="form-control tableInputSelect" id="out" name="out" type="text" placeholder="输出地址带项目名" value="com" data-toggle="tooltip"
+                               data-placement="top" title="输出地址带项目名"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right">
+                        <label>sourceSetJava:</label>
+                    </td>
+                    <td colspan="4">
+                        <input class="form-control tableInputSelect" id="sourceSetJava" name="sourceSetJava" type="text"
+                               placeholder="默认.src.main.java" title="默认.src.main.java" value=".src.main.java"
+                               data-toggle="tooltip" data-placement="top" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right">
+                        <label>sourceSetResources:</label>
+                    </td>
+                    <td colspan="4">
+                        <input class="form-control tableInputSelect" id="sourceSetResources" name="sourceSetResources" type="text"
+                               placeholder="默认：.src.main.resources" value=".src.main.resources"
+                               data-toggle="tooltip" data-placement="top" title="默认：.src.main.resources"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right">
+                        <label>package:</label>
+                    </td>
+                    <td colspan="4">
+                        <input class="form-control tableInputSelect" id="packageOut" name="packageOut" type="text" placeholder="请输入包名地址" value="com"
+                               data-toggle="tooltip" data-placement="top" title="请输入包名地址"/>
+                    </td>
+                </tr>
+                <tr>
+                    <input type="hidden" name="controllerEnable" id="controllerEnable" value="true"/>
+                    <td class="text-right">
+                        <label>controller&nbsp;package:</label>
+                    </td>
+                    <td>
+                        <input class="form-control tableInputSelect" id="controllerOut" name="controllerOut" type="text"  placeholder="请输入controller地址" data-toggle="tooltip" data-placement="top" title="controller 输出地址" value=".controller"/>
+                    </td>
+                    <td>
+                        <label>suffix</label>
+                    </td>
+                    <td>
+                        <input class="form-control tableInputSelect " type="text" id="controllerSuffix"  name="controllerSuffix" value="Controller" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <input type="hidden" name="serviceEnable" id="serviceEnable" value="true"/>
+                    <td class="text-right"><label>service&nbsp;package:</label></td>
+                    <td>
+                        <input class="form-control tableInputSelect" id="serviceOut" name="serviceOut" type="text"  placeholder="service 输出地址" data-toggle="tooltip" data-placement="top" title="service 输出地址" value=".service"/>
+                    </td>
+                    <td><label>suffix</label></td>
+                    <td>
+                        <input class="form-control tableInputSelect " type="text" id="serviceSuffix"  name="serviceSuffix" value="Service" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                    </td>
+                    <td><button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button></td>
+                </tr>
+
+                <tr>
+                    <input type="hidden" name="serviceImplEnable" id="serviceImplEnable" value="true"/>
+                    <td class="text-right"><label>serviceImpl&nbsp;package:</label></td>
+                    <td>
+                        <input class="form-control tableInputSelect" id="serviceImplOut" name="serviceImplOut" type="text"  placeholder="serviceImpl 输出地址" data-toggle="tooltip" data-placement="top" title="serviceImpl 输出地址" value=".service.impl"/>
+                    </td>
+                    <td><label>suffix</label></td>
+                    <td>
+                        <input class="form-control tableInputSelect " type="text" id="serviceImplSuffix"  name="serviceImplSuffix" value="ServiceImpl" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                    </td>
+                    <td><button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button></td>
+                </tr>
+
+                <tr>
+                    <input type="hidden" name="mapperEnable" id="mapperEnable" value="true"/>
+                    <td class="text-right">
+                        <label>mapper&nbsp;package:</label>
+                    </td>
+                    <td>
+                        <input class="form-control tableInputSelect" id="mapperOut" name="mapperOut" type="text"  placeholder="mapper 输出地址" data-toggle="tooltip" data-placement="top" title="mapper 输出地址" value=".mapper"/>
+                    </td>
+                    <td>
+                        <label>suffix</label>
+                    </td>
+                    <td>
+                        <input class="form-control tableInputSelect " type="text" id="mapperSuffix"  name="mapperSuffix" value="Mapper" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <input type="hidden" name="mapperXmlEnable" id="mapperXmlEnable" value="true"/>
+                    <td class="text-right">
+                        <label>xml&nbsp;package:</label>
+                    </td>
+                    <td>
+                        <input class="form-control tableInputSelect" id="mapperXmlOut" name="mapperXmlOut" type="text"  placeholder="mapperXml 输出地址" data-toggle="tooltip" data-placement="top" title="mapperXml 输出地址" value=".mapper.xml"/>
+                    </td>
+                    <td>
+                        <label>suffix</label>
+                    </td>
+                    <td>
+                        <input class="form-control tableInputSelect " type="text" id="mapperXmlSuffix"  name="mapperXmlSuffix" value="Mapper" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                    </td>
+                </tr>
+
+                    <tr>
+                        <input type="hidden" name="entityEnable" id="entityEnable" value="true"/>
+                        <td class="text-right">
+                            <label>entity&nbsp;package:</label>
+                        </td>
+                        <td>
+                            <input class="form-control tableInputSelect" id="entityOut" name="entityOut" type="text"  placeholder="entity 输出地址" data-toggle="tooltip" data-placement="top" title="entity 输出地址" value=".entity"/>
+                        </td>
+                        <td>
+                            <label>suffix</label>
+                        </td>
+                        <td>
+                            <input class="form-control tableInputSelect " type="text" id="entitySuffix"  name="entitySuffix" value="Entity" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                        </td>
+                    </tr>
+
+                        <tr>
+                            <input type="hidden" name="requestEnable" id="requestEnable" value="true"/>
+                            <td class="text-right">
+                                <label>request&nbsp;package:</label>
+                            </td>
+                            <td>
+                                <input class="form-control tableInputSelect" id="requestOut" name="requestOut" type="text"  placeholder="request 输出地址" data-toggle="tooltip" data-placement="top" title="request 输出地址" value=".request"/>
+                            </td>
+                            <td>
+                                <label>suffix</label>
+                            </td>
+                            <td>
+                                <input class="form-control tableInputSelect " type="text" id="requestSuffix"  name="requestSuffix" value="Request" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <input type="hidden" name="responseEnable" id="responseEnable" value="true"/>
+                            <td class="text-right">
+                                <label>response&nbsp;package:</label>
+                            </td>
+                            <td>
+                                <input class="form-control tableInputSelect" id="responseOut" name="responseOut" type="text"  placeholder="response 输出地址" data-toggle="tooltip" data-placement="top" title="response 输出地址" value=".response"/>
+                            </td>
+                            <td>
+                                <label>suffix</label>
+                            </td>
+                            <td>
+                                <input class="form-control tableInputSelect " type="text" id="responseSuffix"  name="responseSuffix" value="Response" data-toggle="tooltip" data-placement="top" title="首字母默认大写" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <input type="hidden" name="permissionEnable" id="permissionEnable" value="true"/>
+                            <td class="text-right">
+                                <label>permission&nbsp;class</label>
+                            </td>
+                            <td>
+                                <input class="form-control tableInputSelect" id="permissionOut" name="permissionOut" type="text"  placeholder="permissionOut 输出地址" data-toggle="tooltip" data-placement="top" title="permissionOut 输出地址" value=".annotation"/>
+                            </td>
+                            <td>
+                                <label>name</label>
+                            </td>
+                            <td >
+                                <input class="form-control tableInputSelect" id="permissionClassName" name="permissionClassName" type="text"  placeholder="permissionClassName" data-toggle="tooltip" data-placement="top" title="permissionClassName" value="MarsPermission" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-default" onclick="jinyong(this)">禁用</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>response&nbsp;class&nbsp;name:</label>
+                            </td>
+                            <td colspan="4">
+                                <input class="form-control tableInputSelect" id="responseClassName" name="responseClassName" type="text"  placeholder="responseClassName 不填写默认Response.java,包名读取 response package" data-toggle="tooltip" data-placement="top" title="responseClassName 不填写默认Response.java,包名读取 response package" value="Response" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>swagger</label>
+                            </td>
+                            <td colspan="4">
+                                swagger2:<input type="checkbox" checked="true" value="true"   id="swagger2Enable" name="swagger2Enable" title="使用swagger自动生产接口文档" data-toggle="tooltip" data-placement="top"  />&nbsp;
+                                swagger3:<input type="checkbox"   id="swagger3Enable"  name="swagger3Enable" title="使用swagger自动生产接口文档"  data-toggle="tooltip" data-placement="top" />&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>page&nbsp;mode</label>
+                            </td>
+                            <td colspan="4">
+                                pageHelper:<input type="checkbox" checked="true" value="true" id="pageHelperEnable" name="pageHelperEnable" title="使用springboot 对应的pageHelper 分页工具" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;
+<!--                                mybatis-plus:<input type="checkbox"  id="mybatisPlusPageStatus" name="mybatisPlusPageStatus" title="使用springboot 对应的pageHelper 分页工具" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>mybatis xml</label>
+                            </td>
+                            <td colspan="4">
+
+                                mapperXml-alias: <input type="checkbox" checked="true" value="true"  id="mapperXmlAliasEnable" name="mapperXmlAliasEnable" data-toggle="tooltip" data-placement="top" title="true代表mapper xml ResultMap type字段使用mybatis Alias别名，false 代表mapper xml ResultMap type字段全路径 " />&nbsp;&nbsp;
+                                mapperXml-inserts:<input type="checkbox"   id="insertsStatus" name="insertsStatus" title="生成MapperXml insert 语句"  data-toggle="tooltip" data-placement="top" />&nbsp;&nbsp
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>interface</label>
+                            </td>
+                            <td colspan="4">
+                                custom-pageList:<input type="checkbox"  id="customPageListInterfaceEnable" name="customPageListInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义pageList接口" />
+                            </td>
+                        </tr>
+                        <input type="hidden" id="mybatisPlusEnable" name="mybatisPlusEnable" value="true" />
+                        <input type="hidden" id="lombokEnable" name="lombokEnable" value="true"/>
+                        <input type="hidden" id="serialVersionUIDEnable" name="serialVersionUIDEnable" value="true"/>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- left 结束-->
+
+
+
+    <!-- right 开始-->
+    <div class="right" style="overflow: auto" >
+        <form id="formDiv">
+
+            <div style="width: 100%;float:right;">
+                <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
+                    <label >剔前缀：</label><input type="text" style="width: 100px;" placeholder="剔除前缀" id="excludePrefix" name="excludePrefix" />
+                    <label >作者：</label><input id="author" name="author" type="text" style="width: 150px;"  placeholder="请输入注释的作者名称" value="fashionbrot"  />
+<!--                    <label >邮箱：</label><input id="email" name="email"   type="text"  placeholder="请输入注释的邮箱" value="fashionbrot@163.com" />-->
+                </div>
+                <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
+                    <label >配置项：</label>
+                    基础类:<input type="checkbox" checked="checked" title="vo类,config配置类,异常类,枚举类"   id="fixed" name="fixed"  />&nbsp;&nbsp;
+                </div>
+                <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
+                    <label >数据库：</label><select id="databaseId" style="width: 250px;height: 26px"></select>
+                    <button class="btn btn-sm btn-primary " id="databaseConfig" type="button" >
+                        数据库连接管理
+                    </button>
+
+                </div>
+
+                <div style="float: left;display: inline;width: 100%;text-align: left;padding: 3px;">
+
+
+                    <label >数据表：</label><input type="text"  placeholder="表名" id="tableName" style="width: 250px;height: 26px" >
+                    <button type="button" class="btn btn-sm btn-primary" id="searchButton"
+                            data-complete-text="搜索">搜索
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary" id="clearButton" >清空 </button>
+
+                    <button type="button" class="btn btn-sm btn-primary" id="generate" onclick="generateCode()" data-complete-text="生成代码">生成代码</button>
+
+                    <button type="button" class="btn btn-sm btn-success" onclick="saveRequestSetCookie()">缓存</button>
+
+
+                </div>
+
+            </div>
+        </form>
+        <table class="table table-bordered table-striped" >
+            <thead>
+                <tr>
+                    <td>
+                        <div class=" td-checkbox">
+                            <input type="checkbox" id="all" class="group-checkable" />
+                        </div>
+                    </td>
+                    <th style="text-align: center">序号</th>
+                    <th style="text-align: center">表名</th>
+                    <!--<th >数据库引擎</th>-->
+                    <th style="text-align: center">表备注</th>
+                    <th style="text-align: center">创建时间</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" >
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- right 结束-->
+
+    <th:block th:include="database-list :: database-list" />
+    <th:block th:include="add-database :: add-database" />
+
+
+
+</body>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+</script>
+<script th:src="@{/js/md5.min.js}"></script>
+<script th:src="@{/js/index.js?v=16}"></script>
+<script th:src="@{/js/drag-modal.js}"></script>
+</html>

@@ -25,6 +25,6 @@ import java.util.Collection;
 public interface ${className}${serviceSuffix}  #if($mybatisPlusEnable)extends IService<${className}${entitySuffix}>#end{
 
     #if (${customPageListInterfaceEnable})
-    Object pageList(${className}${requestSuffix} ${requestSuffixLowerCase});
+    Object pageList(${className}${requestSuffix} request);
     #end
 }
