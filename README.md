@@ -5,6 +5,15 @@
 ### 添加自定义生成文件，可在vm.json 中添加即可
 ### 支持在线增加数据库连接，增加后即可生成对应的数据库代码
 
+```shell
+#下载地址
+curl https://gitee.com/fashionbrot/mybatis-generate/releases/download/0.0.1/mybatis-generate-0.0.1.jar
+#启动命令
+nuhub java -jar mybatis-generate-0.0.1.jar &
+#访问地址
+http://localhost:9999/
+```
+
 # 如需要更多功能请 在这里提交 [issues](https://gitee.com/fashionbrot/mybatis-generate/issues)
 
 ![本地路径](./doc/1.jpeg "样例")
