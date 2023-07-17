@@ -1,7 +1,7 @@
 # mybatis-generate 
 ###  mybatis 代码生成工具、包含 entity、mapper、mapperXml、service、serviceImpl 、controller 等其他工具的代码生成。
 ###  其中包含 springboot、mybatis-plus 、lombok、pageHelper、swagger2、swagger3 框架集成
-### 目前只支持mysql ，其他数据库，需要自行 实现Query,增加 QueryHelper 方可实现
+### 目前只支持mysql、oracle、SqlServer、postgresql ，其他数据库，需要自行 实现Query,增加 QueryHelper 方可实现
 ### 添加自定义生成文件，可在vm.json 中添加即可
 ### 支持在线增加数据库连接，增加后即可生成对应的数据库代码
 
