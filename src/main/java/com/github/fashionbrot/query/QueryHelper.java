@@ -17,6 +17,7 @@ public class QueryHelper {
         putQuery(DatabaseEnum.MYSQL.getDb(),MysqlQuery.class);
         putQuery(DatabaseEnum.ORACLE.getDb(),OracleQuery.class);
         putQuery(DatabaseEnum.SQL_SERVER.getDb(),SqlserverQuery.class);
+        putQuery(DatabaseEnum.POST_GRE_SQL.getDb(), PostgresqlQuery.class);
     }
 
 
