@@ -3,7 +3,7 @@
 
 <mapper namespace="${packageOut}${mapperOut}.${className}${mapperSuffix}">
 
-    #if ($mapperXmlAliasStatus)
+    #if ($mapperXmlAliasEnable)
 
         <resultMap type="${variableClassName}${entitySuffix}" id="${variableClassName}Map">
             #foreach($field in $tableFieldList)
