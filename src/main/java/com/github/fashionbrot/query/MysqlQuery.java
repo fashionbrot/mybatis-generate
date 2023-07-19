@@ -16,37 +16,36 @@ public  class MysqlQuery extends AbstractQuery{
 
     @Override
     public String tablesListSql(String tableName) {
-        String like ="";
+        StringBuilder sql =new StringBuilder();
+        sql.append("select table_name tableName, engine, table_comment comments, create_time createTime from information_schema.tables ");
+        sql.append("where table_schema = (select database()) ");
         if (ObjectUtil.isNotEmpty(tableName)){
-            like="  and table_name like like %"+tableName+"%" ;
+            sql.append("and table_name like '%").append(tableName).append("%' ");
         }
-
-        String sql = "        select table_name tableName, engine, table_comment comments, create_time createTime from\n" +
-                "        information_schema.tables\n" +
-                "        where table_schema = (select database())\n" +
-                 like+
-                "        order by create_time desc";
-
-        return sql;
+        sql.append("order by create_time desc");
+        return sql.toString();
     }
 
     @Override
     public String tablesSql(String tableName) {
-        String sql = "select table_name tableName, engine, table_comment comments, create_time createTime\n" +
-                "        from information_schema.tables\n" +
-                "        where table_schema = (select database())\n" ;
+        StringBuilder sql =new StringBuilder();
+        sql.append("select table_name tableName, engine, table_comment comments, create_time createTime from information_schema.tables ");
+        sql.append(" where table_schema = (select database()) ");
         if (ObjectUtil.isNotEmpty(tableName)){
-            sql+=" and table_name = '"+tableName+"'" ;
+            sql.append("and table_name ='").append(tableName).append("'");
         }
-        return sql;
+        return sql.toString();
     }
 
     @Override
     public String tableFieldsSql(String tableName) {
-        String sql = "select column_name columnName, data_type dataType, column_comment comments, column_key columnKey, extra\n" +
-                "        from information_schema.columns\n" +
-                "        where table_name = '"+tableName+"' and table_schema = (select database()) order by ordinal_position";
-        return sql;
+        StringBuilder sql =new StringBuilder();
+        sql.append("select column_name columnName, data_type dataType, column_comment comments, column_key columnKey, extra ");
+        sql.append("from information_schema.columns ");
+        sql.append("where table_schema = (select database()) ");
+        sql.append("and table_name='").append(tableName).append("' ");
+        sql.append("order by ordinal_position");
+        return sql.toString();
     }
 
 
