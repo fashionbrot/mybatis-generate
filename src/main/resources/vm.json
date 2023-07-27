@@ -68,7 +68,7 @@
     "enable": "${responseEnable}",
     "templatePath": "vm/single/PageResponse.java.vm",
     "outFilePath": "${out}.${sourceSetJava}.${packageOut}.${responseOut}",
-    "outFileName": "Page${responseClassName}",
+    "outFileName": "Page${responseSuffix}",
     "outFileSuffix": ".java"
   },
   {

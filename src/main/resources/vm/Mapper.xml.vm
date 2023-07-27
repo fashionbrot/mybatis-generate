@@ -4,21 +4,17 @@
 <mapper namespace="${packageOut}${mapperOut}.${className}${mapperSuffix}">
 
     #if ($mapperXmlAliasEnable)
-
-        <resultMap type="${variableClassName}${entitySuffix}" id="${variableClassName}Map">
-            #foreach($field in $tableFieldList)
-                <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
-            #end
-        </resultMap>
-
+    <resultMap type="${variableClassName}${entitySuffix}" id="${variableClassName}Map">
+        #foreach($field in $tableFieldList)
+            <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
+        #end
+    </resultMap>
     #else
-
-        <resultMap type="${packageOut}${entityOut}.${className}${entitySuffix}" id="${variableClassName}Map">
-            #foreach($field in $tableFieldList)
-                <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
-            #end
-        </resultMap>
-
+    <resultMap type="${packageOut}${entityOut}.${className}${entitySuffix}" id="${variableClassName}Map">
+        #foreach($field in $tableFieldList)
+            <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
+        #end
+    </resultMap>
     #end
 
     <sql id="allColumn">
