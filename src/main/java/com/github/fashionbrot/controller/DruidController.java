@@ -1,10 +1,10 @@
 package com.github.fashionbrot.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.github.fashionbrot.common.util.FileUtil;
 import com.github.fashionbrot.request.DatabaseRequest;
 import com.github.fashionbrot.response.Response;
 import com.github.fashionbrot.service.DruidService;
-import com.github.fashionbrot.util.FileUtil;
 import com.github.fashionbrot.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

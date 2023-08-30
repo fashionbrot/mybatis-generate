@@ -2,6 +2,9 @@ package com.github.fashionbrot.service;
 
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.github.fashionbrot.common.util.FileUtil;
+import com.github.fashionbrot.common.util.GenericTokenUtil;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.config.GenerateOut;
 import com.github.fashionbrot.config.GenerateTemplate;
 import com.github.fashionbrot.entity.ColumnEntity;
@@ -58,7 +61,7 @@ public class MybatisGenerateService {
             List<GenerateOut> generateOutList = getGenerateOutList(velocityContext, tableName);
             if (ObjectUtil.isNotEmpty(generateOutList)){
                 generateOutList.forEach(template->{
-                    FileUtil.createFile(template.getFileFullPath(),template.getTemplateValue().toString());
+                    FileUtil.writeFile(new File(template.getFileFullPath()),template.getTemplateValue().toString());
                 });
             }
         }
@@ -66,7 +69,7 @@ public class MybatisGenerateService {
         List<GenerateOut> fixedGenerateOutList = getFixedGenerateOutList(velocityContext);
         if (ObjectUtil.isNotEmpty(fixedGenerateOutList)){
             fixedGenerateOutList.forEach(template->{
-                FileUtil.createFile(template.getFileFullPath(),template.getTemplateValue().toString());
+                FileUtil.writeFile(new File(template.getFileFullPath()),template.getTemplateValue().toString());
             });
         }
 
@@ -244,7 +247,8 @@ public class MybatisGenerateService {
             //列名转换成Java属性名
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setAttrName(attrName);
-            columnEntity.setVariableAttrName(ObjectUtil.uncapitalize(attrName));
+//            columnEntity.setVariableAttrName(NameUtil.capitalizeFirstLetter(attrName));
+            columnEntity.setVariableAttrName((attrName));
 
             columnEntity.setColumnNameXmlUse(columnEntity.getColumnName());
 
@@ -254,7 +258,7 @@ public class MybatisGenerateService {
             if (attrName.equals(versionFieldName)){
                 columnEntity.setVersionLogic(true);
             }
-            columnEntity.setGetSetName(NameUtil.captureName(attrName));
+            columnEntity.setGetSetName(NameUtil.capitalizeFirstLetter(attrName));
 
             columnEntity.setColumnName(baseMapper.formatColumn(columnEntity.getColumnName()));
 
@@ -297,7 +301,7 @@ public class MybatisGenerateService {
             tableName = tableName.replaceFirst(tablePrefix, "");
         }
         String s = columnToJava(tableName);
-        return NameUtil.captureName(s);
+        return NameUtil.capitalizeFirstLetter(s);
     }
 
 

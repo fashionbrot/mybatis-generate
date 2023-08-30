@@ -1,9 +1,9 @@
 package com.github.fashionbrot.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.config.GenerateTemplate;
 import com.github.fashionbrot.util.JsonUtil;
-import com.github.fashionbrot.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

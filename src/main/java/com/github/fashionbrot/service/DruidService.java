@@ -2,6 +2,8 @@ package com.github.fashionbrot.service;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.fashionbrot.common.util.FileUtil;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.consts.GlobalConst;
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
@@ -9,9 +11,7 @@ import com.github.fashionbrot.exception.MybatisGenerateException;
 import com.github.fashionbrot.mapper.BaseMapper;
 import com.github.fashionbrot.request.DatabaseRequest;
 import com.github.fashionbrot.request.GenerateRequest;
-import com.github.fashionbrot.util.FileUtil;
 import com.github.fashionbrot.util.JsonUtil;
-import com.github.fashionbrot.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,7 @@ public class DruidService {
 
         String path = environment.getProperty(GlobalConst.CACHE_PATH);
         if (ObjectUtil.isEmpty(path)) {
-            path = FileUtil.USER_HOME;
+            path = FileUtil.getUserHome();
         }
         path = path + File.separator + GlobalConst.NAME + File.separator;
         return path;
@@ -57,9 +57,9 @@ public class DruidService {
     public List<DatabaseRequest> getDatabaseList() {
         String path = getPath() + getFileName();
 
-        List<File> files = FileUtil.searchFiles(new File(path), getFileName());
+        List<File> files = com.github.fashionbrot.common.util.FileUtil.searchFiles(new File(path), getFileName());
         if (!CollectionUtils.isEmpty(files)) {
-            String fileContent = FileUtil.getFileContent(files.get(0));
+            String fileContent = com.github.fashionbrot.common.util.FileUtil.getFileContent(files.get(0));
             if (ObjectUtil.isEmpty(fileContent)) {
                 return null;
             }
@@ -87,12 +87,12 @@ public class DruidService {
         String path = getPath();
         String filePath = path + marsQuickCacheName;
 
-        List<File> files = FileUtil.searchFiles(new File(filePath), marsQuickCacheName);
+        List<File> files = com.github.fashionbrot.common.util.FileUtil.searchFiles(new File(filePath), marsQuickCacheName);
 
         List<DatabaseRequest> old = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(files)) {
             old.add(req);
-            String fileContent = FileUtil.getFileContent(files.get(0));
+            String fileContent = com.github.fashionbrot.common.util.FileUtil.getFileContent(files.get(0));
             List<DatabaseRequest> databases = JsonUtil.parseArray(fileContent, new TypeReference<List<DatabaseRequest>>() {});
             if (ObjectUtil.isNotEmpty(databases)) {
                 for (int i = 0; i < databases.size(); i++) {
@@ -106,8 +106,8 @@ public class DruidService {
             old.add(req);
         }
 
-        FileUtil.deleteFile(new File(filePath));
-        FileUtil.writeFile(new File(filePath), JsonUtil.toString(old));
+        com.github.fashionbrot.common.util.FileUtil.deleteFile(new File(filePath));
+        com.github.fashionbrot.common.util.FileUtil.writeFile(new File(filePath), JsonUtil.toString(old));
 
         druidDataSource.setUsername(req.getUsername());
         druidDataSource.setPassword(req.getPassword());

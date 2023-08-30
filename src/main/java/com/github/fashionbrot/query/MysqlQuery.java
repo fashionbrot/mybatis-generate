@@ -1,7 +1,7 @@
 package com.github.fashionbrot.query;
 
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.entity.ColumnEntity;
-import com.github.fashionbrot.util.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
