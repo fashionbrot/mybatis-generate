@@ -6,13 +6,13 @@
     #if ($mapperXmlAliasEnable)
     <resultMap type="${variableClassName}${entitySuffix}" id="${variableClassName}Map">
         #foreach($field in $tableFieldList)
-            <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
+        <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
         #end
     </resultMap>
     #else
     <resultMap type="${packageOut}${entityOut}.${className}${entitySuffix}" id="${variableClassName}Map">
         #foreach($field in $tableFieldList)
-            <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
+        <result property="${field.variableAttrName}" column="${field.columnNameXmlUse}"/>
         #end
     </resultMap>
     #end
