@@ -2,6 +2,7 @@ package com.github.fashionbrot.service;
 
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.github.fashionbrot.common.consts.CharsetConst;
 import com.github.fashionbrot.common.util.FileUtil;
 import com.github.fashionbrot.common.util.GenericTokenUtil;
 import com.github.fashionbrot.common.util.ObjectUtil;
@@ -61,7 +62,7 @@ public class MybatisGenerateService {
             List<GenerateOut> generateOutList = getGenerateOutList(velocityContext, tableName);
             if (ObjectUtil.isNotEmpty(generateOutList)){
                 generateOutList.forEach(template->{
-                    FileUtil.writeFile(new File(template.getFileFullPath()),template.getTemplateValue().toString());
+                    FileUtil.writeFile(new File(template.getFileFullPath()),template.getTemplateValue().toString(), CharsetConst.UTF8_CHARSET);
                 });
             }
         }
@@ -69,7 +70,7 @@ public class MybatisGenerateService {
         List<GenerateOut> fixedGenerateOutList = getFixedGenerateOutList(velocityContext);
         if (ObjectUtil.isNotEmpty(fixedGenerateOutList)){
             fixedGenerateOutList.forEach(template->{
-                FileUtil.writeFile(new File(template.getFileFullPath()),template.getTemplateValue().toString());
+                FileUtil.writeFile(new File(template.getFileFullPath()),template.getTemplateValue().toString(),CharsetConst.UTF8_CHARSET);
             });
         }
 

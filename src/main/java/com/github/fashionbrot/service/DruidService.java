@@ -2,6 +2,7 @@ package com.github.fashionbrot.service;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.fashionbrot.common.consts.CharsetConst;
 import com.github.fashionbrot.common.util.FileUtil;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.consts.GlobalConst;
@@ -106,8 +107,8 @@ public class DruidService {
             old.add(req);
         }
 
-        com.github.fashionbrot.common.util.FileUtil.deleteFile(new File(filePath));
-        com.github.fashionbrot.common.util.FileUtil.writeFile(new File(filePath), JsonUtil.toString(old));
+        FileUtil.deleteFile(new File(filePath));
+        FileUtil.writeFile(new File(filePath), JsonUtil.toString(old), CharsetConst.UTF8_CHARSET);
 
         druidDataSource.setUsername(req.getUsername());
         druidDataSource.setPassword(req.getPassword());

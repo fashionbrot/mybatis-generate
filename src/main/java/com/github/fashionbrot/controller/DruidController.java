@@ -1,6 +1,7 @@
 package com.github.fashionbrot.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.github.fashionbrot.common.consts.CharsetConst;
 import com.github.fashionbrot.common.util.FileUtil;
 import com.github.fashionbrot.request.DatabaseRequest;
 import com.github.fashionbrot.response.Response;
@@ -67,7 +68,7 @@ public class DruidController {
 
         String filePath = path + marsQuickCacheName;
         FileUtil.deleteFile(new File(filePath));
-        FileUtil.writeFile(new File(filePath), JsonUtil.toString(old));
+        FileUtil.writeFile(new File(filePath), JsonUtil.toString(old), CharsetConst.UTF8_CHARSET);
         return Response.success();
     }
 
