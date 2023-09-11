@@ -58,9 +58,9 @@ public class DruidService {
     public List<DatabaseRequest> getDatabaseList() {
         String path = getPath() + getFileName();
 
-        List<File> files = com.github.fashionbrot.common.util.FileUtil.searchFiles(new File(path), getFileName());
+        List<File> files = FileUtil.searchFiles(new File(path), getFileName());
         if (!CollectionUtils.isEmpty(files)) {
-            String fileContent = com.github.fashionbrot.common.util.FileUtil.getFileContent(files.get(0));
+            String fileContent = FileUtil.getFileContent(files.get(0),CharsetConst.UTF8_CHARSET);
             if (ObjectUtil.isEmpty(fileContent)) {
                 return null;
             }
