@@ -88,12 +88,12 @@ public class DruidService {
         String path = getPath();
         String filePath = path + marsQuickCacheName;
 
-        List<File> files = com.github.fashionbrot.common.util.FileUtil.searchFiles(new File(filePath), marsQuickCacheName);
+        List<File> files = FileUtil.searchFiles(new File(filePath), marsQuickCacheName);
 
         List<DatabaseRequest> old = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(files)) {
             old.add(req);
-            String fileContent = com.github.fashionbrot.common.util.FileUtil.getFileContent(files.get(0));
+            String fileContent = FileUtil.getFileContent(files.get(0),CharsetConst.UTF8_CHARSET);
             List<DatabaseRequest> databases = JsonUtil.parseArray(fileContent, new TypeReference<List<DatabaseRequest>>() {});
             if (ObjectUtil.isNotEmpty(databases)) {
                 for (int i = 0; i < databases.size(); i++) {
