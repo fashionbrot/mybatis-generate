@@ -90,7 +90,7 @@
                         <label>output path:</label>
                     </td>
                     <td colspan="4">
-                        <input class="form-control tableInputSelect" id="out" name="out" type="text" placeholder="输出地址带项目名" value="com" data-toggle="tooltip"
+                        <input class="form-control tableInputSelect" id="out" name="out" type="text" placeholder="输出地址带项目名" value="C:\\Users\\" data-toggle="tooltip"
                                data-placement="top" title="输出地址带项目名"/>
                     </td>
                 </tr>
@@ -301,6 +301,7 @@
                                 <label>Tool frame</label>
                             </td>
                             <td colspan="4">
+                                serialVersionUID<input type="checkbox" checked="true" value="true" id="serialVersionUIDEnable" name="serialVersionUIDEnable" title="是否开启序列化" >
                                 lombok<input type="checkbox" checked="true" value="true"  id="lombokEnable" name="lombokEnable" title="使用lombok" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;
                                 mybatis-plus:<input type="checkbox" checked="true" value="true"  id="mybatisPlusEnable" name="mybatisPlusEnable"  title="使用mybatis-plus" data-toggle="tooltip" data-placement="top"  />&nbsp;
                                 pageHelper:<input type="checkbox" checked="true" value="true" id="pageHelperEnable" name="pageHelperEnable" title="使用springboot 对应的pageHelper 分页工具" data-toggle="tooltip" data-placement="top"  />&nbsp;&nbsp;
@@ -335,7 +336,8 @@
                                 selectById:<input type="checkbox" checked="checked" value="true" id="customSelectByIdInterfaceEnable" name="customSelectByIdInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义selectById接口" />
                             </td>
                         </tr>
-                        <input type="hidden" id="serialVersionUIDEnable" name="serialVersionUIDEnable" value="true"/>
+
+
                 </tbody>
             </table>
         </form>

@@ -30,7 +30,9 @@ $(function () {
 
 
 
-    checkBoxClick(new Array("#swagger2Enable",
+    checkBoxClick(new Array(
+        "serialVersionUIDEnable",
+        "#swagger2Enable",
         "#swagger3Enable",
         "#pageHelperEnable",
         "#mapperXmlAliasEnable",
@@ -418,124 +420,80 @@ function firstToUpperCase(name){
 }
 
 function saveRequestSetCookie(){
-    let databaseId =$("#databaseId").val();
-    if (databaseId){
-        databaseId = keyPrefix+md5(databaseId);
-        setLocalStorage(databaseId,"out");
-        setLocalStorage(databaseId,"packageOut")
 
-        setLocalStorage(databaseId,"controllerOut")
-        setLocalStorage(databaseId,"controllerSuffix")
+    let data = $("#formDiv").serialize()+ "&" + $("#left").serialize()+"&databaseName="+$("#databaseId").val();
 
-        setLocalStorage(databaseId,"serviceOut")
-        setLocalStorage(databaseId,"serviceSuffix")
+    $.ajax({
+        url: ctx + "cache/setCache",
+        type: "post",
+        timeout: 2000,
+        data: data,
+        dataType: "json",
+        error: function () {
+            Toast("缓存异常");
+        },
+        success: function (data) {
+            if (data.code == 0) {
+                Toast("成功");
+            } else {
+                alert(data.msg);
+            }
+        }
+    });
 
-        setLocalStorage(databaseId,"serviceImplOut")
-        setLocalStorage(databaseId,"serviceImplSuffix")
-
-        setLocalStorage(databaseId,"mapperOut")
-        setLocalStorage(databaseId,"mapperSuffix")
-
-        setLocalStorage(databaseId,"entityOut")
-        setLocalStorage(databaseId,"entitySuffix")
-
-        setLocalStorage(databaseId,"requestOut")
-        setLocalStorage(databaseId,"requestSuffix")
-
-        setLocalStorage(databaseId,"responseOut")
-        setLocalStorage(databaseId,"responseSuffix")
-
-        setLocalStorage(databaseId,"responseClassName")
-
-        setLocalStorage(databaseId,"permissionOut")
-        setLocalStorage(databaseId,"permissionClassName")
-        setLocalStorage(databaseId,"permissionEnable")
-
-
-
-        setLocalStorage(databaseId,"author")
-
-        setLocalStorage(databaseId,"swagger2Enable");
-        setLocalStorage(databaseId,"swagger3Enable");
-        setLocalStorage(databaseId,"pageHelperEnable");
-        setLocalStorage(databaseId,"mapperXmlAliasEnable");
-        setLocalStorage(databaseId,"customPageListInterfaceEnable")
-    }
-    Toast("缓存成功");
 }
 function loadRequestSetCookie(){
-    let databaseId =$("#databaseId").val();
-    if (databaseId){
-        databaseId = keyPrefix+md5(databaseId);
-        loadLocalStorage(databaseId,"out");
-        loadLocalStorage(databaseId,"packageOut")
 
-        loadLocalStorage(databaseId,"controllerOut")
-        loadLocalStorage(databaseId,"controllerSuffix")
+    let data ="databaseName="+$("#databaseId").val();
 
-        loadLocalStorage(databaseId,"serviceOut")
-        loadLocalStorage(databaseId,"serviceSuffix")
-
-        loadLocalStorage(databaseId,"serviceImplOut")
-        loadLocalStorage(databaseId,"serviceImplSuffix")
-
-        loadLocalStorage(databaseId,"mapperOut")
-        loadLocalStorage(databaseId,"mapperSuffix")
-
-        loadLocalStorage(databaseId,"entityOut")
-        loadLocalStorage(databaseId,"entitySuffix")
-
-        loadLocalStorage(databaseId,"requestOut")
-        loadLocalStorage(databaseId,"requestSuffix")
-
-        loadLocalStorage(databaseId,"responseOut")
-        loadLocalStorage(databaseId,"responseSuffix")
-
-        loadLocalStorage(databaseId,"responseClassName")
-
-        loadLocalStorage(databaseId,"permissionOut")
-        loadLocalStorage(databaseId,"permissionClassName")
-        loadLocalStorage(databaseId,"permissionEnable")
-
-        loadLocalStorage(databaseId,"author")
-
-
-        loadLocalStorage(databaseId,"swagger2Enable");
-        loadLocalStorage(databaseId,"swagger3Enable");
-        loadLocalStorage(databaseId,"pageHelperEnable");
-        loadLocalStorage(databaseId,"mapperXmlAliasEnable");
-        loadLocalStorage(databaseId,"customPageListInterfaceEnable")
-    }
-}
-
-
-function setLocalStorage(key,inputId){
-    let inputType = document.getElementById(inputId).type;
-    if (inputType=="checkbox"){
-        let checked = $('#'+inputId).is(':checked');
-        localStorage.setItem(key+"_"+inputId, checked);
-    }else if (inputType=="text"){
-        localStorage.setItem(key+"_"+inputId, $("#"+inputId).val());
-    }
-
-}
-function loadLocalStorage(key,inputId){
-
-    let inputType = document.getElementById(inputId).type;
-    if (inputType=="checkbox"){
-        let value = localStorage.getItem(key+"_"+inputId);
-        if ("true"==value){
-            $('#'+inputId).prop('checked',true);
-        }else if ("false"==value){
-            $('#'+inputId).prop('checked',false);
+    $.ajax({
+        url: ctx + "cache/getCache",
+        type: "post",
+        timeout: 2000,
+        data: data,
+        dataType: "json",
+        error: function () {
+            Toast("加载缓存异常");
+        },
+        success: function (data) {
+            if (data.code == 0) {
+                let json = data.data;
+                for(let key in json){
+                    setInputValue(key,json[key]);
+                }
+            } else {
+                alert(data.msg);
+            }
         }
+    });
+}
+
+function getInputValue(inputId){
+    let value ;
+    let inputType = document.getElementById(inputId).type;
+    if (inputType=="checkbox"){
+        value = $('#'+inputId).is(':checked');
     }else if (inputType=="text"){
-        let value = localStorage.getItem(key+"_"+inputId);
-        if (value){
+        value = $("#"+inputId).val();
+    }
+    return value;
+}
+
+
+
+function setInputValue(inputId,value){
+    if (document.getElementById(inputId)){
+        let inputType = document.getElementById(inputId).type;
+        if (inputType=="checkbox"){
+            if ("true"==value){
+                $('#'+inputId).prop('checked',true);
+            }else if ("false"==value){
+                $('#'+inputId).prop('checked',false);
+            }
+        }else if (inputType=="text"){
             $("#"+inputId).val(value);
         }
     }
-
 }
 
 function deleteLocalStorageDatabaseId(databaseId) {
