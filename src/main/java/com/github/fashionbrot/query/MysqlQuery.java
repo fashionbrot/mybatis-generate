@@ -51,11 +51,10 @@ public  class MysqlQuery extends AbstractQuery{
 
     @Override
     public boolean isKeyIdentity(ColumnEntity columnEntity) {
-        boolean equals = "auto_increment".equals(columnEntity.getExtra());
-        if (!equals){
-            return "id".equals(columnEntity.getColumnName()) && "PRI".equals(columnEntity.getColumnKey());
+        if ("auto_increment".equals(columnEntity.getExtra())) {
+            return true;
         }
-        return false;
+        return "id".equals(columnEntity.getColumnName()) && "PRI".equals(columnEntity.getColumnKey());
     }
 
 
