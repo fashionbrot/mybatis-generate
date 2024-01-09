@@ -111,20 +111,26 @@ public class GenerateRequest {
      */
     private String fieldUpdateFillNames;
     /**
-     * 如果是Date 类型增加
+     * 如果是 DateTime 类型增加
      */
-    @Builder.Default
-    private String dateFormatValue="yyyy-MM-dd HH:mm:ss";
+    private String dateTimeFormatValue;
+
+    /**
+     * 如果是 Date 类型
+     */
+    private String dateFormatValue;
+    /**
+     * 如果是 time 类型
+     */
+    private String timeFormatValue;
     /**
      * 逻辑删除默认值
      */
-    @Builder.Default
-    private String tableLogicValue="0";
+    private String tableLogicValue;
     /**
      * 逻辑删除”删除值“默认值
      */
-    @Builder.Default
-    private String tableLogicDeleteValue="1";
+    private String tableLogicDeleteValue;
     /**
      * 乐观锁标记字段
      */

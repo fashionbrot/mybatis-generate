@@ -336,7 +336,36 @@
                                 selectById:<input type="checkbox" checked="checked" value="true" id="customSelectByIdInterfaceEnable" name="customSelectByIdInterfaceEnable" data-toggle="tooltip" data-placement="top" title="自定义selectById接口" />
                             </td>
                         </tr>
-
+                        <tr>
+                            <td class="text-right">
+                                <label>date format</label>
+                            </td>
+                            <td colspan="4">
+                                datetime:<input type="text" value="yyyy-MM-dd HH:mm:ss" id="dateTimeFormatValue" name="dateTimeFormatValue" />
+                                date:<input type="text" value="yyyy-MM-dd" id="dateFormatValue" name="dateFormatValue" />
+                                time:<input type="text" value="HH:mm:ss" id="timeFormatValue" name="timeFormatValue" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>mybatis-plus fill</label>
+                            </td>
+                            <td colspan="4">
+                                INSERT:<input type="text" value="createDate" id="fieldInsertFillNames" name="fieldInsertFillNames" data-toggle="tooltip" data-placement="top" title="多个逗号分割" />
+                                UPDATE:<input type="text" value="updateDate" id="fieldUpdateFillNames" name="fieldUpdateFillNames" data-toggle="tooltip" data-placement="top" title="多个逗号分割"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <label>mybatis-plus</label>
+                            </td>
+                            <td colspan="4">
+                                TableLogic:<input type="text" value="delFlag" id="deleteFieldName" name="deleteFieldName" data-toggle="tooltip" data-placement="top" title="多个逗号分割" />
+                                value:<input type="text" value="0" id="tableLogicValue" name="tableLogicValue" data-toggle="tooltip" data-placement="top" title="TableLogic value" style="width: 30px;" />
+                                delval:<input type="text" value="1" id="tableLogicDeleteValue" name="tableLogicDeleteValue" data-toggle="tooltip" data-placement="top" title="TableLogic delval" style="width: 30px;" />
+                                version:<input type="text" value="version" id="versionFieldName" name="versionFieldName" data-toggle="tooltip" data-placement="top" title="多个逗号分割" />
+                            </td>
+                        </tr>
 
                 </tbody>
             </table>
@@ -423,6 +452,6 @@
     var ctx = [[@{/}]];
 </script>
 <script th:src="@{/js/md5.min.js}"></script>
-<script th:src="@{/js/index.js?v=16}"></script>
+<script th:src="@{/js/index.js?v=17}"></script>
 <script th:src="@{/js/drag-modal.js}"></script>
 </html>

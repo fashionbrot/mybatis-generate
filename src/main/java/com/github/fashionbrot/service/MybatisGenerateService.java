@@ -253,10 +253,10 @@ public class MybatisGenerateService {
 
             columnEntity.setColumnNameXmlUse(columnEntity.getColumnName());
 
-            if (attrName.equals(deleteFieldName)){
+            if (attrName.equalsIgnoreCase(deleteFieldName) || attrName.equalsIgnoreCase(columnToJava(deleteFieldName))){
                 columnEntity.setDeleteLogic(true);
             }
-            if (attrName.equals(versionFieldName)){
+            if (attrName.equals(versionFieldName) || attrName.equalsIgnoreCase(columnToJava(versionFieldName))){
                 columnEntity.setVersionLogic(true);
             }
             columnEntity.setGetSetName(NameUtil.capitalizeFirstLetter(attrName));
@@ -279,7 +279,9 @@ public class MybatisGenerateService {
 
     public void setFieldInsertFill(ColumnEntity columnEntity,String fieldInsertFillNames){
         if (ObjectUtil.isNotEmpty(fieldInsertFillNames)){
-            Optional<String> first = Arrays.stream(fieldInsertFillNames.split(",")).filter(m -> m.equalsIgnoreCase(columnEntity.getColumnName())).findFirst();
+            Optional<String> first = Arrays.stream(fieldInsertFillNames.split(","))
+                    .filter(m -> m.equalsIgnoreCase(columnEntity.getColumnName()) || m.equalsIgnoreCase((columnToJava(columnEntity.getColumnName()))))
+                    .findFirst();
             if (first.isPresent()){
                 columnEntity.setInsertFill(true);
             }
@@ -287,7 +289,9 @@ public class MybatisGenerateService {
     }
     public void setFieldUpdateFill(ColumnEntity columnEntity,String fieldUpdateFillNames){
         if (ObjectUtil.isNotEmpty(fieldUpdateFillNames)){
-            Optional<String> first = Arrays.stream(fieldUpdateFillNames.split(",")).filter(m -> m.equalsIgnoreCase(columnEntity.getColumnName())).findFirst();
+            Optional<String> first = Arrays.stream(fieldUpdateFillNames.split(","))
+                    .filter(m -> m.equalsIgnoreCase(columnEntity.getColumnName()) || m.equalsIgnoreCase((columnToJava(columnEntity.getColumnName()))))
+                    .findFirst();
             if (first.isPresent()){
                 columnEntity.setUpdateFill(true);
             }
@@ -309,6 +313,9 @@ public class MybatisGenerateService {
     private static Pattern linePattern = Pattern.compile("_(\\w)");
     /** 下划线转驼峰 */
     public static String columnToJava(String str) {
+        if (ObjectUtil.isEmpty(str)){
+            return "";
+        }
         str = str.toLowerCase();
         Matcher matcher = linePattern.matcher(str);
         StringBuffer sb = new StringBuffer();

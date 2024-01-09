@@ -491,7 +491,9 @@ function setInputValue(inputId,value){
                 $('#'+inputId).prop('checked',false);
             }
         }else if (inputType=="text"){
-            $("#"+inputId).val(value);
+            if (value){
+                $("#"+inputId).val(value);
+            }
         }
     }
 }
