@@ -7,16 +7,15 @@
 
 ```shell
 #下载地址
-curl https://gitee.com/fashionbrot/mybatis-generate/releases/download/0.0.1/mybatis-generate-0.0.1.jar
-#启动命令
-nuhub java -jar mybatis-generate-0.0.1.jar &
-#访问地址
-http://localhost:9999/
+curl https://github.com/fashionbrot/mybatis-generate/releases/download/0.0.6/mybatis-generate-0.0.6.jar
+curl https://github.com/fashionbrot/mybatis-generate/releases/download/0.0.6/start.bat
+
+双击start.bat
 ```
 
 # 如需要更多功能请 在这里提交 [issues](https://gitee.com/fashionbrot/mybatis-generate/issues)
 
-![本地路径](./doc/1.jpeg "样例")
+![本地路径](./doc/1.jpg "样例")
 ![本地路径](./doc/2.jpeg "样例")
 
 
