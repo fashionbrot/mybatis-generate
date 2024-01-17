@@ -2,11 +2,11 @@ plugins {
     id 'java'
     id "org.springframework.boot" version "2.6.0"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
-
+    id 'edu.sc.seis.launch4j' version '3.0.5'
 }
 
 group 'com.github.fashionbrot'
-version '0.0.6'
+version '0.0.7'
 
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
@@ -68,8 +68,29 @@ dependencies {
 
 //    implementation 'com.baomidou:mybatis-plus-generator:3.5.1'
 
+
+}
+
+launch4j {
+
+    outfile="mybatis-generate.exe"
+    headerType="console"
+    jarTask = tasks.bootJar
+
+
+    mutexName="mybatis-generate"
+    windowTitle="mybatis-generate"
+
+    messagesStartupError="An error occurred while starting mybatis-generate"
+    messagesJreVersionError="You are running the wrong version of Java, Please download Java 8."
+    messagesLauncherError="Java is corrupted. Please uninstall and then install  Java 8."
+    messagesInstanceAlreadyExists="mybatis-generate is already running."
 }
 
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+task printVersion {
+    println project.version
+}
