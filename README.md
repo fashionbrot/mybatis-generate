@@ -5,13 +5,7 @@
 ### 添加自定义生成文件，可在vm.json 中添加即可
 ### 支持在线增加数据库连接，增加后即可生成对应的数据库代码
 
-```shell
-#下载地址
-curl https://github.com/fashionbrot/mybatis-generate/releases/download/0.0.6/mybatis-generate-0.0.6.jar
-curl https://github.com/fashionbrot/mybatis-generate/releases/download/0.0.6/start.bat
-
-双击start.bat
-```
+###  下载 mybatis-generate.exe 运行即可使用
 
 # 如需要更多功能请 在这里提交 [issues](https://gitee.com/fashionbrot/mybatis-generate/issues)
 
