@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.fashionbrot.mapper.SqliteMapper">
+
+
+    <select id="tableList" resultType="tableEntity">
+        SELECT name AS tableName,name AS comments  FROM sqlite_master WHERE type='table'
+        <if test="tableName != null and tableName.trim() != ''">
+            and name like concat('%', #{tableName}, '%')
+        </if>
+    </select>
+
+    <select id="queryTable" resultType="tableEntity">
+        SELECT name AS tableName,name AS comments  FROM sqlite_master WHERE type='table'
+        <if test="tableName != null and tableName.trim() != ''">
+           and name like  '%' || #{tableName} || '%'
+        </if>
+    </select>
+
+    <resultMap id="sqliteMap" type="com.github.fashionbrot.entity.ColumnEntity">
+        <result column="name" property="columnName" />
+        <result column="type" property="dataType" />
+        <result column="pk" property="primaryKey" />
+    </resultMap>
+
+    <select id="queryColumns" resultMap="sqliteMap">
+        PRAGMA table_info(${tableName})
+    </select>
+
+
+</mapper>

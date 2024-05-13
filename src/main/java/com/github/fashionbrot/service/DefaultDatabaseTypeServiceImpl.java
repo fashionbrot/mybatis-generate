@@ -6,6 +6,7 @@ import com.github.fashionbrot.entity.TableEntity;
 import com.github.fashionbrot.enums.DatabaseEnum;
 import com.github.fashionbrot.exception.MybatisGenerateException;
 import com.github.fashionbrot.mapper.BaseMapper;
+import com.github.fashionbrot.mapper.SqliteMapper;
 import com.github.fashionbrot.query.Query;
 import com.github.fashionbrot.query.QueryHelper;
 import com.github.fashionbrot.request.GenerateRequest;
@@ -26,6 +27,7 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
     final DruidDataSource dataSource;
     final BaseMapper baseMapper;
     final DruidService druidService;
+    final SqliteMapper sqliteMapper;
 
 
     private Query query;
@@ -34,6 +36,10 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
     @Override
     public List<TableEntity> tableList(GenerateRequest request) {
         druidService.reloadDatabase(request.getDatabaseName());
+
+        if (getDatabaseEnum()==DatabaseEnum.SQLITE){
+            return sqliteMapper.tableList(request.getTableName());
+        }
         initQuery();
         return baseMapper.tableList(query.tablesListSql(request.getTableName()));
     }
@@ -41,6 +47,9 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
     @Override
     public TableEntity queryTable(String tableName) {
 
+        if (getDatabaseEnum()==DatabaseEnum.SQLITE){
+            return sqliteMapper.queryTable(tableName);
+        }
         initQuery();
         return baseMapper.queryTable(query.tablesSql(tableName));
     }
@@ -48,6 +57,11 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
     @Override
     public List<ColumnEntity> queryColumns(String tableName) {
 
+
+        if (getDatabaseEnum()==DatabaseEnum.SQLITE){
+
+            return sqliteMapper.queryColumns(tableName);
+        }
         initQuery();
         return baseMapper.queryColumns(query.tableFieldsSql(tableName));
     }
@@ -55,6 +69,10 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
     @Override
     public boolean isKeyIdentity(ColumnEntity columnEntity) {
 
+
+        if (getDatabaseEnum()==DatabaseEnum.SQLITE){
+            return sqliteMapper.isKeyIdentity(columnEntity);
+        }
         initQuery();
         return query.isKeyIdentity(columnEntity);
     }
@@ -62,20 +80,29 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
     @Override
     public String formatColumn(String columnName) {
 
+        if (getDatabaseEnum()==DatabaseEnum.SQLITE){
+            return sqliteMapper.formatColumn(columnName);
+        }
         initQuery();
         return query.formatColumn(columnName);
     }
 
 
     public void initQuery(){
-        String url =  dataSource.getUrl();
-        DatabaseEnum databaseEnum = DatabaseEnum.getDatabase(url);
-        if (databaseEnum==null){
-            MybatisGenerateException.throwMsg("不支持当前数据库：" + dataSource.getDriverClassName());
-        }
+        DatabaseEnum databaseEnum = getDatabaseEnum();
         this.query = QueryHelper.getQuery(databaseEnum.getDb());
         if (this.query==null){
             MybatisGenerateException.throwMsg( databaseEnum.getDb()+" 未实现Query接口");
         }
     }
+
+    public DatabaseEnum getDatabaseEnum(){
+        String url =  dataSource.getUrl();
+        DatabaseEnum database = DatabaseEnum.getDatabase(url);
+        if (database==null){
+            MybatisGenerateException.throwMsg("不支持当前数据库：" + dataSource.getDriverClassName());
+        }
+        return database;
+    }
+
 }

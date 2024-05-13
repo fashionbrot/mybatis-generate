@@ -24,8 +24,7 @@ processResources {
     }
 }
 repositories {
-    mavenLocal()
-    mavenCentral()
+
     maven { url "https://maven.aliyun.com/repository/public" }
     maven { url "https://maven.aliyun.com/repository/jcenter" }
     maven { url "https://maven.aliyun.com/repository/spring" }
@@ -35,6 +34,8 @@ repositories {
     maven { url "https://maven.aliyun.com/repository/grails-core" }
     maven { url "https://maven.aliyun.com/repository/apache-snapshots" }
     maven { url 'https://repo.spring.io/plugins-snapshot' }
+    mavenLocal()
+    mavenCentral()
 }
 
 ext{
@@ -65,6 +66,7 @@ dependencies {
     implementation 'com.oracle:ojdbc6:11.2.0.3'
     implementation 'com.microsoft.sqlserver:sqljdbc4:4.0'
     implementation 'org.postgresql:postgresql:42.4.3'
+    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
 
 //    implementation 'com.baomidou:mybatis-plus-generator:3.5.1'
 
