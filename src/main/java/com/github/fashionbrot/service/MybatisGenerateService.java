@@ -56,6 +56,7 @@ public class MybatisGenerateService {
         request.setDatabaseType(databaseEnum.getDb());
 
         VelocityContext velocityContext = initTemplate(request);
+        velocityContext.put("ObjectUtil",new ObjectUtil());
 
         for(String tableName : tableNames){
 

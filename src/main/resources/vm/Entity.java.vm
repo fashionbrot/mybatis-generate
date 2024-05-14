@@ -63,15 +63,15 @@ public class ${className}${entitySuffix} #if($serialVersionUIDEnable)implements 
 	 * $field.comments
 	 */
 	#end
-	#if($field.attrType=='Date' && $field.dataType=='datetime')
+	#if($ObjectUtil.toLowerCase($field.attrType)=='date' &&  $ObjectUtil.toLowerCase($field.dataType)== 'datetime')
 	@DateTimeFormat(pattern = "${dateTimeFormatValue}")
 	@JsonFormat(timezone = "GMT+8", pattern = "${dateTimeFormatValue}")
 	#end
-	#if($field.attrType=='Date' && $field.dataType=='date')
+	#if($ObjectUtil.toLowerCase($field.attrType)=='date' && $ObjectUtil.toLowerCase($field.dataType)== 'date')
 	@DateTimeFormat(pattern = "${dateFormatValue}")
 	@JsonFormat(timezone = "GMT+8", pattern = "${dateFormatValue}")
 	#end
-	#if($field.attrType=='Date' && $field.dataType=='time')
+	#if($ObjectUtil.toLowerCase($field.attrType)=='date' && $ObjectUtil.toLowerCase($field.dataType)== 'time')
 	@DateTimeFormat(pattern = "${timeFormatValue}")
 	@JsonFormat(timezone = "GMT+8", pattern = "${timeFormatValue}")
 	#end
