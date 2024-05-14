@@ -50,15 +50,24 @@ public class ${className}${responseSuffix}  {
      * $field.comments
      */
     #end
-    #if($field.attrType=='Date')
+    #if($ObjectUtil.toLowerCase($field.attrType)=='date' &&  $ObjectUtil.toLowerCase($field.dataType)== 'datetime')
+    @DateTimeFormat(pattern = "${dateTimeFormatValue}")
+    @JsonFormat(timezone = "GMT+8", pattern = "${dateTimeFormatValue}")
+    #end
+    #if($ObjectUtil.toLowerCase($field.attrType)=='date' && $ObjectUtil.toLowerCase($field.dataType)== 'date')
     @DateTimeFormat(pattern = "${dateFormatValue}")
     @JsonFormat(timezone = "GMT+8", pattern = "${dateFormatValue}")
+    #end
+    #if($ObjectUtil.toLowerCase($field.attrType)=='date' && $ObjectUtil.toLowerCase($field.dataType)== 'time')
+    @DateTimeFormat(pattern = "${timeFormatValue}")
+    @JsonFormat(timezone = "GMT+8", pattern = "${timeFormatValue}")
     #end
     private $field.attrType $field.variableAttrName;
 #end
 
+#if(!$lombokEnable)
 #foreach($field in $tableFieldList)
-    #if(!$lombokEnable)
+
     public ${field.attrType} get${field.getSetName}() {
             return $field.variableAttrName;
             }
@@ -66,7 +75,8 @@ public class ${className}${responseSuffix}  {
     public void set${field.getSetName}(${field.attrType} $field.variableAttrName) {
             this.$field.variableAttrName = $field.variableAttrName;
             }
-    #end
+
+#end
 #end
 
 }
