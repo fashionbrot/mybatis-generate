@@ -249,7 +249,10 @@ public class MybatisGenerateService {
             String attrName = columnToJava(columnEntity.getColumnName());
             columnEntity.setAttrName(attrName);
 //            columnEntity.setVariableAttrName(NameUtil.capitalizeFirstLetter(attrName));
-            columnEntity.setVariableAttrName((attrName));
+            columnEntity.setVariableAttrName(attrName);
+            if (ObjectUtil.isEmpty(columnEntity.getComments())){
+                columnEntity.setComments(attrName);
+            }
 
             columnEntity.setColumnNameXmlUse(columnEntity.getColumnName());
 
@@ -263,7 +266,7 @@ public class MybatisGenerateService {
 
             columnEntity.setColumnName(baseMapper.formatColumn(columnEntity.getColumnName()));
 
-            String attrType = dataTypeService.getProperty(columnEntity.getDataType(), "unknowType");
+            String attrType = dataTypeService.getProperty(formatDataType(columnEntity.getDataType()), "unknowType");
             columnEntity.setAttrType(attrType);
             if (attrType.equalsIgnoreCase("BigDecimal" )) {
                 context.internalPut("hasBigDecimal",true);
@@ -275,6 +278,14 @@ public class MybatisGenerateService {
 
 
         }
+    }
+
+    public static String formatDataType(String input){
+        if (ObjectUtil.isEmpty(input)){
+            return input;
+        }
+        // 使用正则表达式移除括号及其中的内容
+        return input.replaceAll("\\(\\d+\\)", "");
     }
 
     public void setFieldInsertFill(ColumnEntity columnEntity,String fieldInsertFillNames){

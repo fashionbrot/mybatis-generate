@@ -91,8 +91,8 @@ public class ${className}${entitySuffix} #if($serialVersionUIDEnable)implements 
 	private $field.attrType $field.variableAttrName;
 #end
 
+#if(!$lombokEnable)
 #foreach($field in $tableFieldList)
-	#if(!$lombokEnable)
 	public ${field.attrType} get${field.getSetName}() {
 		return $field.variableAttrName;
 	}
@@ -100,7 +100,7 @@ public class ${className}${entitySuffix} #if($serialVersionUIDEnable)implements 
 	public void set${field.getSetName}(${field.attrType} $field.variableAttrName) {
 		this.$field.variableAttrName = $field.variableAttrName;
 	}
-	#end
+#end
 #end
 
 }

@@ -62,11 +62,6 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
         if (getDatabaseEnum()==DatabaseEnum.SQLITE){
 
             List<ColumnEntity> columnEntities = sqliteMapper.queryColumns(tableName);
-            if (ObjectUtil.isNotEmpty(columnEntities)){
-                columnEntities.forEach(m->{
-                    m.setComments(m.getColumnName());
-                });
-            }
             return columnEntities;
         }
         initQuery();
