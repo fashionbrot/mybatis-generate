@@ -1,6 +1,7 @@
 package com.github.fashionbrot.service;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.entity.ColumnEntity;
 import com.github.fashionbrot.entity.TableEntity;
 import com.github.fashionbrot.enums.DatabaseEnum;
@@ -60,7 +61,13 @@ public class DefaultDatabaseTypeServiceImpl implements DatasourceTypeServer {
 
         if (getDatabaseEnum()==DatabaseEnum.SQLITE){
 
-            return sqliteMapper.queryColumns(tableName);
+            List<ColumnEntity> columnEntities = sqliteMapper.queryColumns(tableName);
+            if (ObjectUtil.isNotEmpty(columnEntities)){
+                columnEntities.forEach(m->{
+                    m.setComments(m.getColumnName());
+                });
+            }
+            return columnEntities;
         }
         initQuery();
         return baseMapper.queryColumns(query.tableFieldsSql(tableName));
