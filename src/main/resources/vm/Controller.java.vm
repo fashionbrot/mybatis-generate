@@ -138,7 +138,7 @@ public class ${className}${controllerSuffix}  {
     #end
     @PostMapping("/insert")
     @ResponseBody
-    public ${responseClassName} insert(@RequestBody ${className}${entitySuffix} entity){
+    public ${responseClassName} insert(${className}${entitySuffix} entity){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.save(entity));
     }
     #end
@@ -155,7 +155,7 @@ public class ${className}${controllerSuffix}  {
     #end
     @PostMapping("/updateById")
     @ResponseBody
-    public ${responseClassName} updateById(@RequestBody ${className}${entitySuffix} entity){
+    public ${responseClassName} updateById(${className}${entitySuffix} entity){
         return ${responseClassName}.success( ${variableClassName}${serviceSuffix}.updateById(entity));
     }
     #end
